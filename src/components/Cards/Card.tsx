@@ -20,6 +20,7 @@ export function Card() {
                 <i className="fa-regular fa-user m-2"></i>
                 <span>Nome cliente:  </span>
                 <span style={{color: 'gray'}}> Vinicius Pereira{/*{entrega.nomecliente} */}</span>
+                <span style={{color: 'gray'}}>({/*{entrega.codigocliente} */})</span>
                 </div>
 
                 <div style={{fontSize: 15}}>

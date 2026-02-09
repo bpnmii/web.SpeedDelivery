@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ContainerRoot } from '../components'
 import { Home } from '../pages/Home'
 import { DetalheEntrega } from '@/pages/DetalheEntrega'
+import { ResultadoEntrega } from '@/pages/ResultadoEntrega'
 
 export const Router = () => {
   return (
@@ -10,6 +11,7 @@ export const Router = () => {
         <Route element={<ContainerRoot />}>
           <Route path="/" element={<Home />} />
           <Route path="/DetalheEntrega" element={<DetalheEntrega />} />
+          <Route path="/ResultadoEntrega" element={<ResultadoEntrega />} />
         </Route>
       </Routes>
     </BrowserRouter>

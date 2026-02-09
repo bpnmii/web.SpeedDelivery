@@ -11,7 +11,7 @@ export function Card() {
             <MaxCard.Header>
                 <div>
                 <div>{/* {entrega.sequencial} */}</div>
-                <h1>CÓDIGO DA OPERAÇÃO: <span style={{color: 'GrayText', fontSize: 20}} > 3232{/* {entrega.codigopedido} */}</span> </h1>
+                <h1>CÓDIGO DA OPERAÇÃO: <span style={{color: 'GrayText', fontSize: 20}} > {/* {entrega.codigopedido} */}</span> </h1>
             
                 </div>
             </MaxCard.Header>
@@ -19,14 +19,14 @@ export function Card() {
                 <div style={{fontSize: 15, marginBottom:20}}>
                 <i className="fa-regular fa-user m-2"></i>
                 <span>Nome cliente:  </span>
-                <span style={{color: 'gray'}}> Vinicius Pereira{/*{entrega.nomecliente} */}</span>
+                <span style={{color: 'gray'}}> {/*{entrega.nomecliente} */}</span>
                 <span style={{color: 'gray'}}>({/*{entrega.codigocliente} */})</span>
                 </div>
 
                 <div style={{fontSize: 15}}>
                 <i className="fa-light fa-location-dot m-2"></i>
                 <span>Endereço: {/*{entrega.endereco} */}</span>
-                <span style={{color: 'gray'}}> Rua Sargento Herminio Aurelio Sampaio, 699, São Paulo {/*{entrega.endereco} */}</span>
+                <span style={{color: 'gray'}}>  {/*{entrega.endereco} */}</span>
                 </div>
             </MaxCard.Body>
             <MaxCard.Footer>

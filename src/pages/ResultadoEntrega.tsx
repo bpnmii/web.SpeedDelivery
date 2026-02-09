@@ -69,13 +69,13 @@ export function ResultadoEntrega() {
           justifyContent: 'center',
           display: 'flex',
           gap: 400,}}>
-        <button onClick={() => navigate("/DetalheEntrega")} style={{background:"grey", borderRadius:3, border:"none", width:50, height: 50}}>
+        <Button onClick={() => navigate("/DetalheEntrega")} style={{background:"grey", borderRadius:3, border:"none", width:30, height: 50}}>
             <i className="fa-solid fa-arrow-left-long"></i>
-        </button>
+        </Button>
 
-        <button onClick={() => navigate("/")} style={{background:"grey", borderRadius:3, border:"none", width:50, height: 50}}>
+        <Button onClick={() => navigate("/")} style={{background:"grey", borderRadius:3, border:"none", width:30, height: 50}}>
             <i className="fa-solid fa-floppy-disk"></i>
-        </button>
+        </Button>
       </footer>
     </div>
   )

@@ -31,7 +31,7 @@ export function Modal({ isOpen, onClose }: ModalProps) {
 
       {/* Modal */}
       <div
-      style={{position:"absolute", bottom:350, width:300, height:210, left:165, background:"white", padding:30, zIndex:40, borderRadius:10}}
+      style={{position:"absolute", bottom:350, width:300, height:210, left:150, background:"white", padding:30, zIndex:40, borderRadius:10}}
         onClick={(e) => e.stopPropagation()}
       >
         <div style={{display:"flex", gap:28}}>

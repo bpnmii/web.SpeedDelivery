@@ -10,7 +10,10 @@ export const Router = () => {
       <Routes>
         <Route element={<ContainerRoot />}>
           <Route path="/" element={<Home />} />
-          <Route path="/DetalheEntrega" element={<DetalheEntrega />} />
+          <Route
+            path="/DetalheEntrega/:codigo_operacao"
+            element={<DetalheEntrega />}
+          />
           <Route path="/ResultadoEntrega" element={<ResultadoEntrega />} />
         </Route>
       </Routes>

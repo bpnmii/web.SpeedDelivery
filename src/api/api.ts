@@ -19,6 +19,9 @@ const entregas = {
   listarEntregas: (): AxiosPromise<{ Entregas: IEntregasListar[] }> =>
     xhr.get('/entregas'),
 
+  mostrarEntregas: (codigo_operacao: number): AxiosPromise<IEntregas> =>
+    xhr.get(`/entregas/${codigo_operacao}`),
+
   atualizarEntregas: (
     codigo_operacao: number,
     data: Partial<IEntregas>,
@@ -40,6 +43,9 @@ const itensPedido = {
     params: IItensPedidoListar,
   ): AxiosPromise<{ ItensPedidos: IItensPedidoListar[] }> =>
     xhr.get('/itensPedido', { params }),
+
+  mostrarItensPedido: (codigo_entrega: number) =>
+    xhr.get(`/itensPedido/${codigo_entrega}`),
 
   atualizarItensPedidos: (
     codigo: number,

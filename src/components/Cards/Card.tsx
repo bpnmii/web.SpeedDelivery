@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 
 export function Card() {
   const navigate = useNavigate()
-  // 1. Sempre inicialize como array vazio para o primeiro render não quebrar o .map()
   const [entregas, setEntregas] = useState<IEntregasListar[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -14,22 +13,20 @@ export function Card() {
     api.entregas
       .listarEntregas()
       .then((response) => {
-        // 2. Verificação defensiva: se response.data.Entregas não existir, usa array vazio
         const dados = response.data?.Entregas || response.data || []
         setEntregas(dados)
       })
       .catch((err) => {
         console.error('Erro ao carregar:', err)
-        setEntregas([]) // Evita que fique undefined em caso de erro
+        setEntregas([])
       })
       .finally(() => {
         setLoading(false)
       })
-  }, []) // 3. Certifique-se de que aqui é um array vazio, e não uma função.
+  }, [])
 
   if (loading) return <p>Carregando entregas...</p>
 
-  // 4. Verificação extra antes do map (Optional Chaining)
   return (
     <>
       {entregas && entregas.length > 0 ? (
@@ -46,12 +43,32 @@ export function Card() {
               }}
             >
               <MaxCard.Header>
-                <div style={{alignItems:'center', display:'flex', textAlign:'center', justifyContent:'center', gap:10 }}>
-
-                  <div style={{ fontWeight: 'bold', fontSize:20, background:"#508DDF", borderRadius:6, width:30, alignItems:'center', display:'flex', textAlign:'center', justifyContent:'center', color:'white' }}>
-                     {entrega.sequencia_entrega}
+                <div
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    gap: 10,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: 20,
+                      background: '#508DDF',
+                      borderRadius: 6,
+                      width: 30,
+                      alignItems: 'center',
+                      display: 'flex',
+                      textAlign: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                    }}
+                  >
+                    {entrega.sequencia_entrega}
                   </div>
-                  <h1 style={{marginTop:10}}>
+                  <h1 style={{ marginTop: 10 }}>
                     CÓDIGO DA OPERAÇÃO:{' '}
                     <span style={{ color: 'GrayText', fontSize: 20 }}>
                       {entrega.codigo_operacao}

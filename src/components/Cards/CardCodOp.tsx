@@ -59,15 +59,24 @@ export function CardCodOp() {
             <Button onClick={() => navigate('/')}>
               <i className="fa-solid fa-arrow-left-long"></i>
             </Button>
-            <div className="d-flex gap-20">
-              <h1>
-                CÓDIGO DA OPERAÇÃO:
-                <span style={{ color: 'GrayText', fontSize: 20 }}>
-                  {' '}
-                  {entrega.codigo_operacao}
-                </span>
-              </h1>
-            </div>
+            <div className='d-flex gap-20'>
+                        <div className='initial'>
+                                <div></div>
+                                <h1>CÓDIGO DA OPERAÇÃO: 
+                                    <span style={{color: 'GrayText', fontSize: 20}} >
+                                        {/* {entrega.codigopedido} */}
+                                    </span> 
+                                </h1>
+                        </div>
+
+                        <div className=''>
+                            <Button >
+                                <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
+                                <span style={{fontSize:15}}>Localizar</span>
+                            </Button>
+                        </div>
+
+                    </div>
           </MaxCard.Header>
 
           <MaxCard.Body>
@@ -179,7 +188,7 @@ export function CardCodOp() {
             </div>
           </MaxCard.Body>
           <MaxCard.Footer>
-            <Button onClick={() => setIsOpen(true)}>
+            <Button onClick={() => setIsOpen(true)} style={{alignItems:'center', justifyContent:'center', display:"flex"}}>
               Adicionar Ocorrência
             </Button>
           </MaxCard.Footer>

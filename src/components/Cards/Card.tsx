@@ -46,11 +46,12 @@ export function Card() {
               }}
             >
               <MaxCard.Header>
-                <div>
-                  <div style={{ fontWeight: 'bold' }}>
-                    Seq: {entrega.sequencia_entrega}
+                <div style={{alignItems:'center', display:'flex', textAlign:'center', justifyContent:'center', gap:10 }}>
+
+                  <div style={{ fontWeight: 'bold', fontSize:20, background:"#508DDF", borderRadius:6, width:30, alignItems:'center', display:'flex', textAlign:'center', justifyContent:'center', color:'white' }}>
+                     {entrega.sequencia_entrega}
                   </div>
-                  <h1>
+                  <h1 style={{marginTop:10}}>
                     CÓDIGO DA OPERAÇÃO:{' '}
                     <span style={{ color: 'GrayText', fontSize: 20 }}>
                       {entrega.codigo_operacao}

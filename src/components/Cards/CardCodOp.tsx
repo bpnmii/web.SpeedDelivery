@@ -140,6 +140,7 @@ export function CardCodOp() {
                     </div>
                 </MaxCard.Footer>
             </div>
+            
         <div style={{display: 'flex', gap:90, alignItems:'center', justifyContent: 'center', fontSize:15, marginBottom:10}}>
             <Button >
                 <i className="fa-solid fa-pause"></i>

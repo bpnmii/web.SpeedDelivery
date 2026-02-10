@@ -2,9 +2,7 @@ import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 import { env } from '../env'
 
 const url =
-  env.VITE_ENV === 'dev'
-    ? 'http://localhost:3000'
-    : 'http://localhost:3000'
+  env.VITE_ENV === 'dev' ? 'http://localhost:3333' : 'http://localhost:3333'
 
 const headers = (tokenAuth: string): AxiosRequestHeaders => ({
   Accept: 'application/json',

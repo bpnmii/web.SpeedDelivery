@@ -1,52 +1,101 @@
+import { IEntregasListar } from '@/@types'
+import api from '@/api/api'
 import { Button, MaxCard } from 'maxscalla-lib'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { number } from 'zod'
 
 export function Card() {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
+  // 1. Sempre inicialize como array vazio para o primeiro render não quebrar o .map()
+  const [entregas, setEntregas] = useState<IEntregasListar[]>([])
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    api.entregas
+      .listarEntregas()
+      .then((response) => {
+        // 2. Verificação defensiva: se response.data.Entregas não existir, usa array vazio
+        const dados = response.data?.Entregas || response.data || []
+        setEntregas(dados)
+      })
+      .catch((err) => {
+        console.error('Erro ao carregar:', err)
+        setEntregas([]) // Evita que fique undefined em caso de erro
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, []) // 3. Certifique-se de que aqui é um array vazio, e não uma função.
+
+  if (loading) return <p>Carregando entregas...</p>
+
+  // 4. Verificação extra antes do map (Optional Chaining)
   return (
-    <MaxCard.Container>
-        <div style={{ boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)', borderRadius:10 }}>
-            <MaxCard.Header>
+    <>
+      {entregas && entregas.length > 0 ? (
+        entregas.map((entrega) => (
+          <MaxCard.Container
+            key={entrega.codigo_operacao}
+            style={{ marginBottom: '20px' }}
+          >
+            <div
+              style={{
+                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
+                borderRadius: 10,
+                backgroundColor: '#fff',
+              }}
+            >
+              <MaxCard.Header>
                 <div>
-                <div>{/* {entrega.sequencial} */}</div>
-                <h1>CÓDIGO DA OPERAÇÃO: <span style={{color: 'GrayText', fontSize: 20}} > {/* {entrega.codigopedido} */}</span> </h1>
-            
+                  <div style={{ fontWeight: 'bold' }}>
+                    Seq: {entrega.sequencia_entrega}
+                  </div>
+                  <h1>
+                    CÓDIGO DA OPERAÇÃO:{' '}
+                    <span style={{ color: 'GrayText', fontSize: 20 }}>
+                      {entrega.codigo_operacao}
+                    </span>{' '}
+                  </h1>
                 </div>
-            </MaxCard.Header>
-            <MaxCard.Body>
-                <div style={{fontSize: 15, marginBottom:20}}>
-                <i className="fa-regular fa-user m-2"></i>
-                <span>Nome cliente:  </span>
-                <span style={{color: 'gray'}}> {/*{entrega.nomecliente} */}</span>
-                <span style={{color: 'gray'}}>({/*{entrega.codigocliente} */})</span>
+              </MaxCard.Header>
+              <MaxCard.Body>
+                <div style={{ fontSize: 15, marginBottom: 20 }}>
+                  <i className="fa-regular fa-user m-2"></i>
+                  <span>Nome cliente: </span>
+                  <span style={{ color: 'gray' }}>{entrega.nome_cliente}</span>
                 </div>
 
-                <div style={{fontSize: 15}}>
-                <i className="fa-light fa-location-dot m-2"></i>
-                <span>Endereço: {/*{entrega.endereco} */}</span>
-                <span style={{color: 'gray'}}>  {/*{entrega.endereco} */}</span>
+                <div style={{ fontSize: 15 }}>
+                  <i className="fa-light fa-location-dot m-2"></i>
+                  <span>Endereço: </span>
+                  <span style={{ color: 'gray' }}>
+                    {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                    {entrega.estado}
+                  </span>
                 </div>
-            </MaxCard.Body>
-            <MaxCard.Footer>
-
-                <div style={{  alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',}}>
-                    <Button
-                    onClick={() => navigate("/DetalheEntrega")}
-                    style={{
-                        borderRadius: 5,
-                        width: 200,
-                    }}
-                    >
-                    <i className="fa-light fa-play"></i>
+              </MaxCard.Body>
+              <MaxCard.Footer>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Button
+                    onClick={() =>
+                      navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)
+                    }
+                    style={{ borderRadius: 5, width: 200 }}
+                  >
+                    <i
+                      className="fa-light fa-play"
+                      style={{ marginRight: '8px' }}
+                    ></i>
                     <span>Iniciar</span>
-                    </Button>
+                  </Button>
                 </div>
-            </MaxCard.Footer>
-        </div>
-    </MaxCard.Container>
+              </MaxCard.Footer>
+            </div>
+          </MaxCard.Container>
+        ))
+      ) : (
+        <p>Nenhuma entrega encontrada.</p>
+      )}
+    </>
   )
 }

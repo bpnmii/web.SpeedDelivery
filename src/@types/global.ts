@@ -22,3 +22,86 @@ export interface IFilters {
   column?: string
   value?: string
 }
+
+export enum StatusEntregaEnum {
+  NAO_INICIADO = 'NAO_INICIADO',
+  INICIADO = 'INICIADO',
+  PAUSADO = 'PAUSADO',
+  CONCLUIDO = 'CONCLUIDO',
+}
+
+export enum StatusResultadoEnum {
+  ENTREGA_TOTAL = 'ENTREGA_TOTAL',
+  ENTREGA_PARCIAL = 'ENTREGA_PARCIAL',
+  NAO_ENTREGUE = 'NAO_ENTREGUE',
+}
+
+export interface IEntregas {
+  sequencia_entrega: number
+  codigo_operacao?: number
+  codigo_cliente: number
+  nome_cliente: string
+  CEP: string
+  endereco: string
+  bairro: string
+  cidade: string
+  estado: string
+  status_entrega?: StatusEntregaEnum
+  status_resultado?: StatusResultadoEnum
+}
+
+export interface IEntregasListar {
+  sequencia_entrega: number
+  codigo_operacao?: number
+  codigo_cliente: number
+  nome_cliente: string
+  CEP: string
+  endereco: string
+  bairro: string
+  cidade: string
+  estado: string
+  status_entrega?: StatusEntregaEnum
+  status_resultado?: StatusResultadoEnum
+}
+
+export interface IItensPedido {
+  codigo?: number
+  codigo_entrega: number
+  descricao_produto: string
+  embalagem: string
+  quantidade: number
+}
+
+export interface IItensPedidoListar {
+  ItensPedido: {
+    codigo?: number
+    codigo_entrega: number
+    descricao_produto: string
+    embalagem: string
+    quantidade: number
+  }
+}
+
+export interface IOcorrencias {
+  codigo_ocorrencia: number
+  descricao_ocorrencia: string
+}
+
+export interface IOcorrenciasListar {
+  Ocorrencias: {
+    codigo_ocorrencia: number
+    descricao_ocorrencia: string
+  }
+}
+
+export interface IOcorrenciasEntrega {
+  codigo_ocorrencia: number
+  codigo_entrega: number
+}
+
+export interface IOcorrenciasEntregaListar {
+  OcorrenciasEntrega: {
+    codigo_ocorrencia: number
+    codigo_entrega: number
+  }
+}

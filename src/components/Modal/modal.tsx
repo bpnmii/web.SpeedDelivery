@@ -41,15 +41,15 @@ export function Modal({ isOpen, onClose }: ModalProps) {
           </Button>
         </div>
 
-        <form style={{  justifyContent:"center", alignItems:"center", marginTop:30 }}>
+        <form style={{ display:"flex", justifyContent:"center", alignItems:"center", marginTop:30 }}>
           <input type="text" style={{ borderRadius:6}}/>
-          <div style={{ display:"flex", justifyContent:"center", alignItems:"center", marginTop:30 }}>
-            <Button>
-              <span>Enviar</span>
-            </Button>
-          </div>
         </form>
 
+        <div style={{ display:"flex", justifyContent:"center", alignItems:"center", marginTop:30 }}>
+          <Button>
+            <span>Enviar</span>
+          </Button>
+    </div>
       </div>
     </>
   );

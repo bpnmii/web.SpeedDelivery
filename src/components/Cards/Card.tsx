@@ -1,4 +1,4 @@
-import { IEntregasListar } from '@/@types'
+import { IEntregas } from '@/@types'
 import api from '@/api/api'
 import { Button, MaxCard } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 export function Card() {
   const navigate = useNavigate()
-  const [entregas, setEntregas] = useState<IEntregasListar[]>([])
+  const [entregas, setEntregas] = useState<IEntregas[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

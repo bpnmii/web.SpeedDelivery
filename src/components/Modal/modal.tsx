@@ -1,56 +1,161 @@
-import { Button } from "maxscalla-lib";
-import { useNavigate } from "react-router-dom";
-
+import { IOcorrencias } from '@/@types'
+import api from '@/api/api'
+import { Button } from 'maxscalla-lib'
+import { useEffect, useState } from 'react'
 
 type ModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
+  isOpen: boolean
+  onClose: () => void
+  codigoEntrega?: number
+}
 
-export function Modal({ isOpen, onClose }: ModalProps) {
-  if (!isOpen) return null;
+export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
+  const [ocorrencias, setOcorrencias] = useState<IOcorrencias[]>([])
+  const [loading, setLoading] = useState(false)
+  const [selecionada, setSelecionada] = useState('')
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    async function fetchData() {
+      if (!isOpen) return
 
+      try {
+        setLoading(true)
+        const res = await api.ocorrencias.listarOcorrencias()
+
+        setOcorrencias(res.data.Ocorrencias)
+      } catch (err: any) {
+        console.error(
+          'ERRO AO BUSCAR OCORRÊNCIAS:',
+          err.response?.data || err.message,
+        )
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [isOpen])
+
+  if (!isOpen) return null
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+
+    if (!selecionada) return
+
+    try {
+      setLoading(true)
+
+      await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
+        codigo_entrega: Number(codigoEntrega),
+        codigo_ocorrencia: Number(selecionada),
+      })
+
+      onClose()
+    } catch (err: any) {
+      console.error(
+        'ERRO AO CRIAR OCORRÊNCIA:',
+        err.response?.data || err.message,
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
       {/* Overlay */}
-   <div
-  onClick={onClose}
-  style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    zIndex: 30,
-  }}
-/>
+      <div
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          zIndex: 30,
+        }}
+      />
 
       {/* Modal */}
       <div
-      style={{position:"absolute", bottom:350, width:300, height:210, left:150, background:"white", padding:30, zIndex:40, borderRadius:10}}
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 320,
+          background: 'white',
+          padding: 30,
+          zIndex: 40,
+          borderRadius: 10,
+          boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+        }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{display:"flex", gap:28}}>
-          <h2 style={{justifyContent:"center", alignItems:"center", display:"flex", marginTop:2}}>Adicionar ocorrencia?</h2>
-          <Button onClick={onClose} style={{background:"grey", width:1, height:25}}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h2 style={{ fontSize: '1.2rem', margin: 0 }}>
+            Adicionar ocorrência?
+          </h2>
+          <Button
+            onClick={onClose}
+            style={{ background: 'grey', width: 30, height: 30, padding: 0 }}
+          >
             <i className="fa-solid fa-x"></i>
           </Button>
         </div>
 
-        <form style={{ display:"flex", justifyContent:"center", alignItems:"center", marginTop:30 }}>
-          <input type="text" style={{ borderRadius:6}}/>
-        </form>
+        <form
+          style={{
+            marginTop: 20,
+          }}
+          onSubmit={handleSubmit}
+        >
+          <select
+            style={{
+              width: '100%',
+              padding: '8px',
+              borderRadius: 6,
+              border: '1px solid #ccc',
+              backgroundColor: loading ? '#f0f0f0' : 'white',
+            }}
+            value={selecionada}
+            onChange={(e) => setSelecionada(e.target.value)}
+            disabled={loading}
+          >
+            <option value="">
+              {loading ? 'Carregando...' : 'Selecione uma ocorrência'}
+            </option>
+            {ocorrencias.map((item) => (
+              <option
+                key={item.codigo_ocorrencia}
+                value={item.codigo_ocorrencia}
+              >
+                {item.descricao_ocorrencia}
+              </option>
+            ))}
+          </select>
 
-        <div style={{ display:"flex", justifyContent:"center", alignItems:"center", marginTop:30 }}>
-          <Button>
-            <span>Enviar</span>
-          </Button>
-    </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: 30,
+            }}
+          >
+            <Button disabled={loading || !selecionada}>
+              <span>{loading ? 'Aguarde...' : 'Enviar'}</span>
+            </Button>
+          </div>
+        </form>
       </div>
     </>
-  );
+  )
 }

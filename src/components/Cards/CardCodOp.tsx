@@ -2,7 +2,12 @@ import { Button, MaxCard } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
 import { Modal } from '../Modal/modal'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IEntregas, IItensPedido } from '@/@types'
+import {
+  IEntregas,
+  IItensPedido,
+  IOcorrencias,
+  IOcorrenciasEntrega,
+} from '@/@types'
 import api from '@/api/api'
 
 export function CardCodOp() {
@@ -13,31 +18,39 @@ export function CardCodOp() {
   const [loading, setLoading] = useState(true)
   const [entrega, setEntrega] = useState<IEntregas | null>(null)
   const [itensPedido, setItensPedido] = useState<IItensPedido[]>([])
-
+  const [ocorrencias, setOcorrencias] = useState<IOcorrenciasEntrega[]>([])
   useEffect(() => {
     async function fetchData() {
       if (!codigo_operacao) return
 
       try {
         setLoading(true)
-        const resEntrega = await api.entregas.mostrarEntregas(
-          Number(codigo_operacao),
-        )
-        setEntrega(resEntrega.data)
 
-        if (resEntrega.data?.codigo_operacao) {
-          const resItens = await api.itensPedido.mostrarItensPedido(
-            Number(resEntrega.data?.codigo_operacao),
-          )
-          setItensPedido(resItens.data)
-        }
+        const codigo = Number(codigo_operacao)
+
+        const { data: entregaData } = await api.entregas.mostrarEntregas(codigo)
+
+        setEntrega(entregaData)
+
+        const response = await api.ocorrenciasEntrega.mostrarOcorrenciaEntrega(
+          codigo,
+        )
+
+        console.log('Resposta completa:', response)
+
+        setOcorrencias(response.data)
+
+        const { data: itensData } = await api.itensPedido.mostrarItensPedido(
+          codigo,
+        )
+
+        setItensPedido(itensData)
       } catch (err: any) {
-        console.error('ERRO DO SERVIDOR:', err.response?.data)
+        console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [codigo_operacao])
 
@@ -59,24 +72,24 @@ export function CardCodOp() {
             <Button onClick={() => navigate('/')}>
               <i className="fa-solid fa-arrow-left-long"></i>
             </Button>
-            <div className='d-flex gap-20'>
-                        <div className='initial'>
-                                <div></div>
-                                <h1>CÓDIGO DA OPERAÇÃO: 
-                                    <span style={{color: 'GrayText', fontSize: 20}} >
-                                        {/* {entrega.codigopedido} */}
-                                    </span> 
-                                </h1>
-                        </div>
+            <div className="d-flex gap-20">
+              <div className="initial">
+                <div></div>
+                <h1>
+                  CÓDIGO DA OPERAÇÃO:
+                  <span style={{ color: 'GrayText', fontSize: 20 }}>
+                    {entrega.codigo_operacao}
+                  </span>
+                </h1>
+              </div>
 
-                        <div className=''>
-                            <Button >
-                                <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
-                                <span style={{fontSize:15}}>Localizar</span>
-                            </Button>
-                        </div>
-
-                    </div>
+              <div className="">
+                <Button>
+                  <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
+                  <span style={{ fontSize: 15 }}>Localizar</span>
+                </Button>
+              </div>
+            </div>
           </MaxCard.Header>
 
           <MaxCard.Body>
@@ -170,25 +183,45 @@ export function CardCodOp() {
             <h1>Ocorrências:</h1>
           </MaxCard.Header>
           <MaxCard.Body>
-            {/* O conteúdo estático que você já tinha */}
-            <div
-              style={{
-                borderRadius: 4,
-                background: 'grey',
-                color: 'white',
-                width: '100%',
-                height: 40,
-                display: 'flex',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-              }}
-            >
-              <h3 style={{ fontSize: 14 }}>Iniciado</h3>
-              <span style={{ fontSize: 12 }}>09/09/2026 22:44</span>
-            </div>
+            {ocorrencias && ocorrencias.length > 0 ? (
+              ocorrencias.map((oc) => (
+                <div
+                  key={oc.index}
+                  style={{
+                    borderRadius: 4,
+                    background: '#555',
+                    color: 'white',
+                    width: '100%',
+                    padding: 10,
+                    marginBottom: 10,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <h3 style={{ fontSize: 14 }}>
+                    {oc.ocorrencia?.descricao_ocorrencia}
+                  </h3>
+                  <span style={{ fontSize: 12 }}>
+                    {oc.created_at
+                      ? new Date(oc.created_at).toLocaleString()
+                      : ''}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p>Nenhuma ocorrência registrada.</p>
+            )}
           </MaxCard.Body>
           <MaxCard.Footer>
-            <Button onClick={() => setIsOpen(true)} style={{alignItems:'center', justifyContent:'center', display:"flex"}}>
+            <Button
+              onClick={() => setIsOpen(true)}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+              }}
+            >
               Adicionar Ocorrência
             </Button>
           </MaxCard.Footer>
@@ -211,7 +244,11 @@ export function CardCodOp() {
           </Button>
         </div>
 
-        <Modal isOpen={IsOpen} onClose={() => setIsOpen(false)} />
+        <Modal
+          isOpen={IsOpen}
+          onClose={() => setIsOpen(false)}
+          codigoEntrega={entrega.codigo_operacao!}
+        />
       </MaxCard.Container>
     </>
   )

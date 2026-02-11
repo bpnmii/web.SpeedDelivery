@@ -1,14 +1,11 @@
 import type { AxiosPromise } from 'axios'
 import xhr from './xhr'
 import {
+  ICriarOcorrenciasEntrega,
   IEntregas,
-  IEntregasListar,
   IItensPedido,
-  IItensPedidoListar,
   IOcorrencias,
-  IOcorrenciasListar,
   IOcorrenciasEntrega,
-  IOcorrenciasEntregaListar,
 } from '@/@types/global'
 
 const entregas = {
@@ -16,7 +13,7 @@ const entregas = {
     return xhr.post('/entregas', data)
   },
 
-  listarEntregas: (): AxiosPromise<{ Entregas: IEntregasListar[] }> =>
+  listarEntregas: (): AxiosPromise<{ Entregas: IEntregas[] }> =>
     xhr.get('/entregas'),
 
   mostrarEntregas: (codigo_operacao: number): AxiosPromise<IEntregas> =>
@@ -39,10 +36,9 @@ const itensPedido = {
     return xhr.post('/itensPedido', data)
   },
 
-  listarItensPedidos: (
-    params: IItensPedidoListar,
-  ): AxiosPromise<{ ItensPedidos: IItensPedidoListar[] }> =>
-    xhr.get('/itensPedido', { params }),
+  listarItensPedidos: (): AxiosPromise<{
+    ItensPedidos: IItensPedido[]
+  }> => xhr.get('/itensPedido'),
 
   mostrarItensPedido: (codigo_entrega: number) =>
     xhr.get(`/itensPedido/${codigo_entrega}`),
@@ -64,10 +60,8 @@ const ocorrencias = {
     return xhr.post('/ocorrencias', data)
   },
 
-  listarOcorrencias: (
-    params: IOcorrenciasListar,
-  ): AxiosPromise<{ Ocorrencias: IOcorrenciasListar[] }> =>
-    xhr.get('/ocorrencias', { params }),
+  listarOcorrencias: (): AxiosPromise<{ Ocorrencias: IOcorrencias[] }> =>
+    xhr.get('/ocorrencias'),
 
   atualizarOcorrencia: (
     codigo_ocorrencia: number,
@@ -83,16 +77,19 @@ const ocorrencias = {
 
 const ocorrenciasEntrega = {
   criarOcorrenciaEntrega: (
-    data: IOcorrenciasEntrega,
+    data: ICriarOcorrenciasEntrega,
   ): AxiosPromise<IOcorrenciasEntrega> => {
     return xhr.post('/ocorrenciasEntrega', data)
   },
 
-  listarOcorrenciaEntregas: (
-    params: IOcorrenciasEntregaListar,
-  ): AxiosPromise<{
-    OcorrenciaEntregas: IOcorrenciasEntregaListar[]
-  }> => xhr.get('/ocorrenciasEntrega', { params }),
+  listarOcorrenciaEntregas: (): AxiosPromise<{
+    OcorrenciaEntregas: IOcorrenciasEntrega[]
+  }> => xhr.get('/ocorrenciasEntrega'),
+
+  mostrarOcorrenciaEntrega: (
+    codigo_entrega: number,
+  ): AxiosPromise<IOcorrenciasEntrega[]> =>
+    xhr.get(`/ocorrenciasEntrega/${codigo_entrega}`),
 }
 
 const api = {

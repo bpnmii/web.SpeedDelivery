@@ -50,20 +50,6 @@ export interface IEntregas {
   status_resultado?: StatusResultadoEnum
 }
 
-export interface IEntregasListar {
-  sequencia_entrega: number
-  codigo_operacao?: number
-  codigo_cliente: number
-  nome_cliente: string
-  CEP: string
-  endereco: string
-  bairro: string
-  cidade: string
-  estado: string
-  status_entrega?: StatusEntregaEnum
-  status_resultado?: StatusResultadoEnum
-}
-
 export interface IItensPedido {
   codigo?: number
   codigo_entrega: number
@@ -72,36 +58,19 @@ export interface IItensPedido {
   quantidade: number
 }
 
-export interface IItensPedidoListar {
-  ItensPedido: {
-    codigo?: number
-    codigo_entrega: number
-    descricao_produto: string
-    embalagem: string
-    quantidade: number
-  }
-}
-
 export interface IOcorrencias {
   codigo_ocorrencia: number
   descricao_ocorrencia: string
 }
 
-export interface IOcorrenciasListar {
-  Ocorrencias: {
-    codigo_ocorrencia: number
-    descricao_ocorrencia: string
-  }
+export interface ICriarOcorrenciasEntrega {
+  codigo_ocorrencia?: number
+  codigo_entrega?: number
 }
 
 export interface IOcorrenciasEntrega {
-  codigo_ocorrencia: number
-  codigo_entrega: number
-}
-
-export interface IOcorrenciasEntregaListar {
-  OcorrenciasEntrega: {
-    codigo_ocorrencia: number
-    codigo_entrega: number
-  }
+  index?: number
+  created_at?: string
+  entrega?: IEntregas
+  ocorrencia?: IOcorrencias
 }

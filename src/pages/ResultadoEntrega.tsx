@@ -2,7 +2,7 @@ import { Button } from 'maxscalla-lib'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 export function ResultadoEntrega() {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
   return (
     <div className="max-container">
       <h1
@@ -59,22 +59,43 @@ export function ResultadoEntrega() {
           justifyContent: 'center',
           display: 'flex',
           marginBottom: 550,
-         
         }}
       >
-        <input type="text" style={{ borderRadius:5}} />
+        <input type="text" style={{ borderRadius: 5 }} />
       </form>
 
-      <footer style={{alignItems: 'center',
+      <footer
+        style={{
+          alignItems: 'center',
           justifyContent: 'center',
           display: 'flex',
-          gap: 400,}}>
-        <Button onClick={() => navigate("/DetalheEntrega")} style={{background:"grey", borderRadius:3, border:"none", width:30, height: 50}}>
-            <i className="fa-solid fa-arrow-left-long"></i>
+          gap: 400,
+        }}
+      >
+        <Button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'grey',
+            borderRadius: 3,
+            border: 'none',
+            width: 30,
+            height: 50,
+          }}
+        >
+          <i className="fa-solid fa-arrow-left-long"></i>
         </Button>
 
-        <Button onClick={() => navigate("/")} style={{background:"grey", borderRadius:3, border:"none", width:30, height: 50}}>
-            <i className="fa-solid fa-floppy-disk"></i>
+        <Button
+          onClick={() => navigate('/')}
+          style={{
+            background: 'grey',
+            borderRadius: 3,
+            border: 'none',
+            width: 30,
+            height: 50,
+          }}
+        >
+          <i className="fa-solid fa-floppy-disk"></i>
         </Button>
       </footer>
     </div>

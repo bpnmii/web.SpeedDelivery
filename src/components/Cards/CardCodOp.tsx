@@ -188,11 +188,9 @@ export function CardCodOp() {
             </div>
           </MaxCard.Body>
           <MaxCard.Footer>
-            <div style={{alignItems:'center', justifyContent:'center', display:"flex"}}>
-              <Button onClick={() => setIsOpen(true)} >
-                Adicionar Ocorrência
-              </Button>
-            </div>
+            <Button onClick={() => setIsOpen(true)} style={{alignItems:'center', justifyContent:'center', display:"flex"}}>
+              Adicionar Ocorrência
+            </Button>
           </MaxCard.Footer>
         </div>
 

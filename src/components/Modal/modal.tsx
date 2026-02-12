@@ -22,7 +22,7 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
         setLoading(true)
         const res = await api.ocorrencias.listarOcorrencias()
 
-        setOcorrencias(res.data.Ocorrencias)
+        setOcorrencias(res.data)
       } catch (err: any) {
         console.error(
           'ERRO AO BUSCAR OCORRÊNCIAS:',

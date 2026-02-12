@@ -69,30 +69,32 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Header>
-            <Button onClick={() => navigate('/')}>
-              <i className="fa-solid fa-arrow-left-long"></i>
-            </Button>
-            <div className="d-flex gap-20">
-              <div className="initial">
+            
+            <div style={{display:'flex'}} className="d-flex gap-20">
+              <div style={{display:'flex', gap:20}} className="initial">
+                <Button onClick={() => navigate('/')}>
+                  <i className="fa-solid fa-arrow-left-long"></i>
+                </Button>
                 <div></div>
-                <h1>
-                  CÓDIGO DA OPERAÇÃO:
-                  <span style={{ color: 'GrayText', fontSize: 20 }}>
-                    {entrega.codigo_operacao}
-                  </span>
-                </h1>
-              </div>
-
-              <div className="">
                 <Button>
                   <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
                   <span style={{ fontSize: 15 }}>Localizar</span>
                 </Button>
               </div>
+
+              
             </div>
           </MaxCard.Header>
 
           <MaxCard.Body>
+            <div className="">
+                <h2>
+                  CÓDIGO DA OPERAÇÃO:
+                  <span style={{ color: 'GrayText', fontSize: 20 }}>
+                    {entrega.codigo_operacao}
+                  </span>
+                </h2>
+              </div>
             <div style={{ fontSize: 15, marginBottom: 20 }}>
               <h3>Entrega sequencial: {entrega.sequencia_entrega}</h3>
             </div>
@@ -214,16 +216,11 @@ export function CardCodOp() {
             )}
           </MaxCard.Body>
           <MaxCard.Footer>
-            <Button
-              onClick={() => setIsOpen(true)}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'flex',
-              }}
-            >
-              Adicionar Ocorrência
-            </Button>
+            <div style={{alignItems:'center', justifyContent:'center', display:"flex"}}>
+              <Button onClick={() => setIsOpen(true)} >
+                Adicionar Ocorrência
+              </Button>
+            </div>
           </MaxCard.Footer>
         </div>
 

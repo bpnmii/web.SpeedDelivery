@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import {
   IEntregas,
   IItensPedido,
-  IOcorrencias,
   IOcorrenciasEntrega,
   StatusEntregaEnum,
 } from '@/@types'
@@ -21,14 +20,82 @@ export function CardCodOp() {
   const [itensPedido, setItensPedido] = useState<IItensPedido[]>([])
   const [ocorrencias, setOcorrencias] = useState<IOcorrenciasEntrega[]>([])
 
+  // --- FUNÇÃO DE LOCALIZAÇÃO COM ALTA PRECISÃO ---
+  async function tratarAbrirRota(cep: string) {
+    const cleanCep = cep.replace(/\D/g, '')
+    if (cleanCep.length !== 8) return
+
+    try {
+      // 1. Busca o endereço pelo CEP
+      const responseCep = await fetch(
+        `https://viacep.com.br/ws/${cleanCep}/json/`,
+      )
+      const dadosEndereco = await responseCep.json()
+
+      if (dadosEndereco.erro) {
+        alert('CEP não encontrado.')
+        return
+      }
+
+      // 2. Transforma o endereço em Latitude/Longitude (Geocoding)
+      const query = `${dadosEndereco.logradouro}, ${dadosEndereco.localidade}, BR`
+      const responseGeocode = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query,
+        )}`,
+        { headers: { 'User-Agent': 'MaxScallaApp/1.0' } },
+      )
+      const dadosGeocode = await responseGeocode.json()
+
+      if (dadosGeocode.length === 0) {
+        alert('Não foi possível obter as coordenadas para este endereço.')
+        return
+      }
+
+      const latDestino = dadosGeocode[0].lat
+      const lonDestino = dadosGeocode[0].lon
+
+      // --- CONFIGURAÇÃO PARA LOCALIZAÇÃO EXATA ---
+      const geoOptions = {
+        enableHighAccuracy: true, // Força o uso do GPS (Alta Precisão)
+        timeout: 10000, // Espera até 10 segundos
+        maximumAge: 0, // Não usa localização em cache
+      }
+
+      // 3. Obtém a localização atual e abre o Google Maps
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${latDestino},${lonDestino}&travelmode=driving`
+          if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            window.location.href = url
+          } else {
+            window.open(url, '_blank')
+          }
+        },
+        (error) => {
+          console.warn('Erro ao obter GPS preciso, usando fallback:', error)
+          // Fallback: abre apenas o ponto de destino
+          const urlFallback = `https://www.google.com/maps/search/?api=1&query=${latDestino},${lonDestino}`
+          if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            window.location.href = urlFallback
+          } else {
+            window.open(urlFallback, '_blank')
+          }
+        },
+        geoOptions, // Aplica as opções de precisão aqui
+      )
+    } catch (error) {
+      console.error('Erro ao processar rota:', error)
+      alert('Ocorreu um erro ao tentar localizar o endereço.')
+    }
+  }
+
   async function Pausar() {
     try {
       const codigo = Number(codigo_operacao)
-
       const data = { status_entrega: StatusEntregaEnum.PAUSADO }
-
       await api.entregas.atualizarEntregas(codigo, data)
-
       window.location.reload()
     } catch (err: any) {
       console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
@@ -38,11 +105,8 @@ export function CardCodOp() {
   async function Retomar() {
     try {
       const codigo = Number(codigo_operacao)
-
       const data = { status_entrega: StatusEntregaEnum.INICIADO }
-
       await api.entregas.atualizarEntregas(codigo, data)
-
       window.location.reload()
     } catch (err: any) {
       console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
@@ -52,28 +116,18 @@ export function CardCodOp() {
   useEffect(() => {
     async function fetchData() {
       if (!codigo_operacao) return
-
       try {
         setLoading(true)
-
         const codigo = Number(codigo_operacao)
-
         const { data: entregaData } = await api.entregas.mostrarEntregas(codigo)
-
         setEntrega(entregaData)
-
         const response = await api.ocorrenciasEntrega.mostrarOcorrenciaEntrega(
           codigo,
         )
-
-        console.log('Resposta completa:', response)
-
         setOcorrencias(response.data)
-
         const { data: itensData } = await api.itensPedido.mostrarItensPedido(
           codigo,
         )
-
         setItensPedido(itensData)
       } catch (err: any) {
         console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
@@ -89,7 +143,6 @@ export function CardCodOp() {
 
   return (
     <>
-      {/* SEÇÃO 1: DADOS DO CLIENTE E ENDEREÇO */}
       <MaxCard.Container>
         <div
           style={{
@@ -104,8 +157,7 @@ export function CardCodOp() {
                 <Button onClick={() => navigate('/')}>
                   <i className="fa-solid fa-arrow-left-long"></i>
                 </Button>
-                <div></div>
-                <Button>
+                <Button onClick={() => tratarAbrirRota(entrega.CEP)}>
                   <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
                   <span style={{ fontSize: 15 }}>Localizar</span>
                 </Button>
@@ -114,9 +166,9 @@ export function CardCodOp() {
           </MaxCard.Header>
 
           <MaxCard.Body>
-            <div className="">
+            <div>
               <h2>
-                CÓDIGO DA OPERAÇÃO:
+                CÓDIGO DA OPERAÇÃO:{' '}
                 <span style={{ color: 'GrayText', fontSize: 20 }}>
                   {entrega.codigo_operacao}
                 </span>
@@ -125,7 +177,6 @@ export function CardCodOp() {
             <div style={{ fontSize: 15, marginBottom: 20 }}>
               <h3>Entrega sequencial: {entrega.sequencia_entrega}</h3>
             </div>
-            {/* ... Restante dos dados do cliente ... */}
             <div style={{ fontSize: 15, marginBottom: 20 }}>
               <i className="fa-regular fa-user m-2"></i>
               <span style={{ color: 'gray' }}>{entrega.nome_cliente}</span>
@@ -144,7 +195,6 @@ export function CardCodOp() {
         </div>
       </MaxCard.Container>
 
-      {/* SEÇÃO 2: ITENS DO PEDIDO (OBSERVAÇÕES) */}
       <MaxCard.Container>
         <div
           style={{
@@ -181,7 +231,6 @@ export function CardCodOp() {
                       {item.descricao_produto}
                     </span>
                   </div>
-                  {/* CAMPO ADICIONADO ABAIXO */}
                   <div style={{ fontSize: 15, marginBottom: 20 }}>
                     <span> Embalagem: </span>
                     <span style={{ color: 'gray' }}>{item.embalagem}</span>
@@ -193,13 +242,12 @@ export function CardCodOp() {
                 </div>
               ))
             ) : (
-              <p>Nenhum item encontrado para este pedido.</p>
+              <p>Nenhum item encontrado.</p>
             )}
           </MaxCard.Body>
         </div>
       </MaxCard.Container>
 
-      {/* SEÇÃO 3: OCORRÊNCIAS */}
       <MaxCard.Container>
         <div
           style={{
@@ -213,9 +261,9 @@ export function CardCodOp() {
           </MaxCard.Header>
           <MaxCard.Body>
             {ocorrencias && ocorrencias.length > 0 ? (
-              ocorrencias.map((oc) => (
+              ocorrencias.map((oc, index) => (
                 <div
-                  key={oc.index}
+                  key={index}
                   style={{
                     borderRadius: 4,
                     background: '#555',
@@ -228,7 +276,7 @@ export function CardCodOp() {
                     alignItems: 'center',
                   }}
                 >
-                  <h3 style={{ fontSize: 14, color:'white' }}>
+                  <h3 style={{ fontSize: 14, color: 'white' }}>
                     {oc.ocorrencia?.descricao_ocorrencia}
                   </h3>
                   <span style={{ fontSize: 12 }}>
@@ -257,7 +305,6 @@ export function CardCodOp() {
           </MaxCard.Footer>
         </div>
 
-        {/* ... Botões de ação ... */}
         <div
           style={{
             display: 'flex',

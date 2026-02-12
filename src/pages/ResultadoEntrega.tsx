@@ -51,19 +51,28 @@ export function ResultadoEntrega() {
   }
   async function onSubmit() {
     try {
-      const codigo = Number(codigo_operacao)
-
-      const data = {
-        observacao: observacao,
-        status_resultado: status_resultado,
-        status_entrega: StatusEntregaEnum.CONCLUIDO,
+      if (!status_resultado) {
+        notifyWarning({ message: 'Selecione o status da entrega' })
+        return
       }
 
-      await api.entregas.atualizarEntregas(codigo, data)
+      const codigo = Number(codigo_operacao)
 
-      window.location.reload()
+      const formData = new FormData()
+
+      formData.append('observacao', observacao)
+      formData.append('status_resultado', status_resultado)
+      formData.append('status_entrega', StatusEntregaEnum.CONCLUIDO)
+
+      imagem.forEach((file) => {
+        formData.append('imagem', file)
+      })
+
+      await api.entregas.atualizarEntregas(codigo, formData)
+
+      navigate('/')
     } catch (err: any) {
-      console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
+      notifyErrorCatch(err)
     }
   }
 
@@ -279,21 +288,21 @@ export function ResultadoEntrega() {
           }}
         >
           <textarea
-          placeholder="Digite uma observação..."
-          value={observacao}
-          onChange={(e) => setObservacao(e.target.value)}
-          style={{
-            width: '350px',
-            minHeight: '100px',
-            padding: '12px 15px',
-            borderRadius: '12px',
-            border: '1px solid #dcdcdc',
-            outline: 'none',
-            fontSize: '16px',
-            resize: 'none', 
-            boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-          }}
-        />
+            placeholder="Digite uma observação..."
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            style={{
+              width: '350px',
+              minHeight: '100px',
+              padding: '12px 15px',
+              borderRadius: '12px',
+              border: '1px solid #dcdcdc',
+              outline: 'none',
+              fontSize: '16px',
+              resize: 'none',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+            }}
+          />
         </div>
         <footer
           style={{
@@ -305,7 +314,7 @@ export function ResultadoEntrega() {
         >
           <Button
             //CORRIGIR
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
             style={{
               background: 'grey',
               borderRadius: 3,
@@ -318,10 +327,8 @@ export function ResultadoEntrega() {
           </Button>
 
           <Button
-            onClick={() => {
-              onSubmit()
-              navigate('/')
-            }}
+            type="button"
+            onClick={onSubmit}
             style={{
               background: 'grey',
               borderRadius: 3,

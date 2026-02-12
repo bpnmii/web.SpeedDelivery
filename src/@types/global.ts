@@ -47,6 +47,7 @@ export interface IEntregas {
   cidade: string
   estado: string
   observacao?: string
+  imagem?: string[]
   status_entrega?: StatusEntregaEnum
   status_resultado?: StatusResultadoEnum
 }

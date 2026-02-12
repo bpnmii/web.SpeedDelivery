@@ -21,8 +21,10 @@ const entregas = {
 
   atualizarEntregas: (
     codigo_operacao: number,
-    data: Partial<IEntregas>,
+    data: any,
   ): AxiosPromise<IEntregas> => {
+    const isFormData = data instanceof FormData
+
     return xhr.patch(`/entregas/${codigo_operacao}`, data)
   },
 

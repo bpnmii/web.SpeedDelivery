@@ -39,8 +39,6 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
   if (!isOpen) return null
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-
     if (!selecionada) return
 
     try {

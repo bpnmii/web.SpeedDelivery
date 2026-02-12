@@ -228,7 +228,7 @@ export function CardCodOp() {
                     alignItems: 'center',
                   }}
                 >
-                  <h3 style={{ fontSize: 14 }}>
+                  <h3 style={{ fontSize: 14, color:'white' }}>
                     {oc.ocorrencia?.descricao_ocorrencia}
                   </h3>
                   <span style={{ fontSize: 12 }}>

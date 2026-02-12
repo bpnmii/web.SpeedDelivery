@@ -7,6 +7,7 @@ import {
   IItensPedido,
   IOcorrencias,
   IOcorrenciasEntrega,
+  StatusEntregaEnum,
 } from '@/@types'
 import api from '@/api/api'
 
@@ -19,6 +20,35 @@ export function CardCodOp() {
   const [entrega, setEntrega] = useState<IEntregas | null>(null)
   const [itensPedido, setItensPedido] = useState<IItensPedido[]>([])
   const [ocorrencias, setOcorrencias] = useState<IOcorrenciasEntrega[]>([])
+
+  async function Pausar() {
+    try {
+      const codigo = Number(codigo_operacao)
+
+      const data = { status_entrega: StatusEntregaEnum.PAUSADO }
+
+      await api.entregas.atualizarEntregas(codigo, data)
+
+      window.location.reload()
+    } catch (err: any) {
+      console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
+    }
+  }
+
+  async function Retomar() {
+    try {
+      const codigo = Number(codigo_operacao)
+
+      const data = { status_entrega: StatusEntregaEnum.INICIADO }
+
+      await api.entregas.atualizarEntregas(codigo, data)
+
+      window.location.reload()
+    } catch (err: any) {
+      console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       if (!codigo_operacao) return
@@ -69,9 +99,8 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Header>
-            
-            <div style={{display:'flex'}} className="d-flex gap-20">
-              <div style={{display:'flex', gap:20}} className="initial">
+            <div style={{ display: 'flex' }} className="d-flex gap-20">
+              <div style={{ display: 'flex', gap: 20 }} className="initial">
                 <Button onClick={() => navigate('/')}>
                   <i className="fa-solid fa-arrow-left-long"></i>
                 </Button>
@@ -81,20 +110,18 @@ export function CardCodOp() {
                   <span style={{ fontSize: 15 }}>Localizar</span>
                 </Button>
               </div>
-
-              
             </div>
           </MaxCard.Header>
 
           <MaxCard.Body>
             <div className="">
-                <h2>
-                  CÓDIGO DA OPERAÇÃO:
-                  <span style={{ color: 'GrayText', fontSize: 20 }}>
-                    {entrega.codigo_operacao}
-                  </span>
-                </h2>
-              </div>
+              <h2>
+                CÓDIGO DA OPERAÇÃO:
+                <span style={{ color: 'GrayText', fontSize: 20 }}>
+                  {entrega.codigo_operacao}
+                </span>
+              </h2>
+            </div>
             <div style={{ fontSize: 15, marginBottom: 20 }}>
               <h3>Entrega sequencial: {entrega.sequencia_entrega}</h3>
             </div>
@@ -216,8 +243,14 @@ export function CardCodOp() {
             )}
           </MaxCard.Body>
           <MaxCard.Footer>
-            <div style={{alignItems:'center', justifyContent:'center', display:"flex"}}>
-              <Button onClick={() => setIsOpen(true)} >
+            <div
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+              }}
+            >
+              <Button onClick={() => setIsOpen(true)}>
                 Adicionar Ocorrência
               </Button>
             </div>
@@ -233,10 +266,20 @@ export function CardCodOp() {
             marginBottom: 20,
           }}
         >
-          <Button>
-            <i className="fa-solid fa-pause"></i> Pausar
-          </Button>
-          <Button onClick={() => navigate('/ResultadoEntrega')}>
+          {entrega.status_entrega === StatusEntregaEnum.INICIADO ? (
+            <Button onClick={Pausar}>
+              <i className="fa-solid fa-pause"></i> <span>Pausar</span>
+            </Button>
+          ) : (
+            <Button onClick={Retomar}>
+              <i className="fa-solid fa-play"></i> <span>Retomar</span>
+            </Button>
+          )}
+          <Button
+            onClick={() =>
+              navigate(`/ResultadoEntrega/${entrega.codigo_operacao}`)
+            }
+          >
             <i className="fa-solid fa-angles-right"></i> Concluir
           </Button>
         </div>

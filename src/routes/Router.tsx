@@ -14,7 +14,10 @@ export const Router = () => {
             path="/DetalheEntrega/:codigo_operacao"
             element={<DetalheEntrega />}
           />
-          <Route path="/ResultadoEntrega" element={<ResultadoEntrega />} />
+          <Route
+            path="/ResultadoEntrega/:codigo_operacao"
+            element={<ResultadoEntrega />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

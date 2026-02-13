@@ -80,133 +80,26 @@ export function ResultadoEntrega() {
 
   return (
     <div className="max-container">
-      <h1
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: 'flex',
-          margin: 20,
-        }}
-      >
-        Como foi a entrega?
-      </h1>
-
-      <div
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: 'flex',
-          gap: 8,
-          marginBottom: 40,
-        }}
-      >
-        <Button
-          style={{
-            width: 120,
-            height: 60,
-            background:
-              hovered === StatusResultadoEnum.ENTREGA_TOTAL
-                ? '#0f8a0f'
-                : 'green',
-            transform:
-              hovered === StatusResultadoEnum.ENTREGA_TOTAL
-                ? 'scale(1.05)'
-                : 'scale(1)',
-            transition: '0.2s',
-          }}
-          onMouseEnter={() => setHovered(StatusResultadoEnum.ENTREGA_TOTAL)}
-          onMouseLeave={() => setHovered(null)}
-          onClick={() => setStatusResultado(StatusResultadoEnum.ENTREGA_TOTAL)}
-        >
-          <i className="fa-regular fa-circle-check"></i>
-          <span>Entrega Total</span>
-        </Button>
-
-        <Button
-          style={{
-            width: 120,
-            height: 60,
-            background:
-              hovered === StatusResultadoEnum.ENTREGA_PARCIAL
-                ? '#cc8400'
-                : 'orange',
-            transform:
-              hovered === StatusResultadoEnum.ENTREGA_PARCIAL
-                ? 'scale(1.05)'
-                : 'scale(1)',
-            transition: '0.2s',
-          }}
-          onMouseEnter={() => setHovered(StatusResultadoEnum.ENTREGA_PARCIAL)}
-          onMouseLeave={() => setHovered(null)}
-          onClick={() =>
-            setStatusResultado(StatusResultadoEnum.ENTREGA_PARCIAL)
-          }
-        >
-          <i className="fa-solid fa-circle-exclamation"></i>
-          <span>Entrega Parcial</span>
-        </Button>
-
-        <Button
-          style={{
-            width: 120,
-            height: 60,
-            background:
-              hovered === StatusResultadoEnum.NAO_ENTREGUE ? '#b30000' : 'red',
-            transform:
-              hovered === StatusResultadoEnum.NAO_ENTREGUE
-                ? 'scale(1.05)'
-                : 'scale(1)',
-            transition: '0.2s',
-          }}
-          onMouseEnter={() => setHovered(StatusResultadoEnum.NAO_ENTREGUE)}
-          onMouseLeave={() => setHovered(null)}
-          onClick={() => setStatusResultado(StatusResultadoEnum.NAO_ENTREGUE)}
-        >
-          <i className="fa-solid fa-circle-xmark"></i>
-          <span>Não Entregue</span>
-        </Button>
-      </div>
-
       <div style={{ textAlign: 'center', marginBottom: 20 }}>
-        <h2 style={{ marginBottom: 10 }}>Deseja adicionar imagem?</h2>
-
-        <div>
-          <button
-            onClick={() => galeriaRef.current?.click()}
-            style={{
-              width: 58,
-              height: 60,
-              border: 'none',
-              background: 'transparent',
-            }}
+        <div style={{ display: 'flex', gap: 200 }}>
+          <Button
+            //CORRIGIR
+            onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
           >
-            <i className="fa-solid fa-image"></i>
-            Galeria
-          </button>
+            <i className="fa-solid fa-arrow-left-long"></i>
+          </Button>
 
-          <button
+          <Button
             onClick={() => cameraRef.current?.click()}
-            style={{
-              width: 58,
-              height: 60,
-              border: 'none',
-              background: 'transparent',
-            }}
+            // style={{
+            //   width: 58,
+            //   height: 60,
+            // }}
           >
             <i className="fa-solid fa-camera"></i>
-            Câmera
-          </button>
+            Adicionar imagem
+          </Button>
         </div>
-
-        {/* Galeria */}
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          ref={galeriaRef}
-          style={{ display: 'none' }}
-          onChange={handleImagem}
-        />
 
         {/* Câmera */}
         <input
@@ -267,7 +160,7 @@ export function ResultadoEntrega() {
         )}
       </div>
 
-      <h2
+      <h3
         style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -276,7 +169,7 @@ export function ResultadoEntrega() {
         }}
       >
         Observação
-      </h2>
+      </h3>
 
       <form action="">
         <div
@@ -304,6 +197,98 @@ export function ResultadoEntrega() {
             }}
           />
         </div>
+
+        <h3
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+            margin: 20,
+          }}
+        >
+          Status da entrega:
+        </h3>
+
+        <div
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+            gap: 8,
+            marginBottom: 40,
+          }}
+        >
+          <Button
+            style={{
+              width: 120,
+              height: 60,
+              background:
+                hovered === StatusResultadoEnum.ENTREGA_TOTAL
+                  ? '#0f8a0f'
+                  : 'green',
+              transform:
+                hovered === StatusResultadoEnum.ENTREGA_TOTAL
+                  ? 'scale(1.05)'
+                  : 'scale(1)',
+              transition: '0.2s',
+            }}
+            onMouseEnter={() => setHovered(StatusResultadoEnum.ENTREGA_TOTAL)}
+            onMouseLeave={() => setHovered(null)}
+            onClick={() =>
+              setStatusResultado(StatusResultadoEnum.ENTREGA_TOTAL)
+            }
+          >
+            <i className="fa-regular fa-circle-check"></i>
+            <span>Entrega Total</span>
+          </Button>
+
+          <Button
+            style={{
+              width: 120,
+              height: 60,
+              background:
+                hovered === StatusResultadoEnum.ENTREGA_PARCIAL
+                  ? '#cc8400'
+                  : 'orange',
+              transform:
+                hovered === StatusResultadoEnum.ENTREGA_PARCIAL
+                  ? 'scale(1.05)'
+                  : 'scale(1)',
+              transition: '0.2s',
+            }}
+            onMouseEnter={() => setHovered(StatusResultadoEnum.ENTREGA_PARCIAL)}
+            onMouseLeave={() => setHovered(null)}
+            onClick={() =>
+              setStatusResultado(StatusResultadoEnum.ENTREGA_PARCIAL)
+            }
+          >
+            <i className="fa-solid fa-circle-exclamation"></i>
+            <span>Entrega Parcial</span>
+          </Button>
+
+          <Button
+            style={{
+              width: 120,
+              height: 60,
+              background:
+                hovered === StatusResultadoEnum.NAO_ENTREGUE
+                  ? '#b30000'
+                  : 'red',
+              transform:
+                hovered === StatusResultadoEnum.NAO_ENTREGUE
+                  ? 'scale(1.05)'
+                  : 'scale(1)',
+              transition: '0.2s',
+            }}
+            onMouseEnter={() => setHovered(StatusResultadoEnum.NAO_ENTREGUE)}
+            onMouseLeave={() => setHovered(null)}
+            onClick={() => setStatusResultado(StatusResultadoEnum.NAO_ENTREGUE)}
+          >
+            <i className="fa-solid fa-circle-xmark"></i>
+            <span>Não Entregue</span>
+          </Button>
+        </div>
+
         <footer
           style={{
             alignItems: 'center',
@@ -313,31 +298,16 @@ export function ResultadoEntrega() {
           }}
         >
           <Button
-            //CORRIGIR
-            onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
-            style={{
-              background: 'grey',
-              borderRadius: 3,
-              border: 'none',
-              width: 30,
-              height: 50,
-            }}
-          >
-            <i className="fa-solid fa-arrow-left-long"></i>
-          </Button>
-
-          <Button
             type="button"
             onClick={onSubmit}
             style={{
-              background: 'grey',
-              borderRadius: 3,
+              borderRadius: 10,
               border: 'none',
-              width: 30,
-              height: 50,
+              width: 400,
+              height: 60,
             }}
           >
-            <i className="fa-solid fa-floppy-disk"></i>
+            <span style={{fontSize:17}}>Salvar</span>
           </Button>
         </footer>
       </form>

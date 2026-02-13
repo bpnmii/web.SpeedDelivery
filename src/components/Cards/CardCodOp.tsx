@@ -166,30 +166,28 @@ export function CardCodOp() {
           </MaxCard.Header>
 
           <MaxCard.Body>
-            <div>
-              <h2>
-                CÓDIGO DA OPERAÇÃO:{' '}
-                <span style={{ color: 'GrayText', fontSize: 20 }}>
-                  {entrega.codigo_operacao}
-                </span>
-              </h2>
-            </div>
-            <div style={{ fontSize: 15, marginBottom: 20 }}>
-              <h3>Entrega sequencial: {entrega.sequencia_entrega}</h3>
-            </div>
-            <div style={{ fontSize: 15, marginBottom: 20 }}>
-              <i className="fa-regular fa-user m-2"></i>
-              <span style={{ color: 'gray' }}>{entrega.nome_cliente}</span>
-            </div>
-            <div style={{ fontSize: 15 }}>
-              <i className="fa-light fa-location-dot m-2"></i>
-              <span style={{ color: 'gray' }}>{entrega.endereco}</span>
-              <br />
-              <span style={{ color: 'gray' }}>
-                {entrega.bairro}, {entrega.cidade} - {entrega.estado}
-              </span>
-              <br />
-              <span style={{ color: 'gray' }}>CEP: {entrega.CEP}</span>
+            <div
+                  style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    gap:15
+                  }}
+                >
+                  <i className="fa-solid fa-user"></i>
+                  <div >
+                    <h3 style={{ display: 'flex' }}>{entrega.nome_cliente}</h3>
+                    <span
+                      style={{
+                        fontSize: 13,
+                        display: 'flex',
+                        margin: 5,
+                      }}
+                    >
+                      {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                      {entrega.estado}
+                    </span>
+                  </div>
+
             </div>
           </MaxCard.Body>
         </div>
@@ -203,41 +201,19 @@ export function CardCodOp() {
             marginBottom: 5,
           }}
         >
-          <MaxCard.Header>
-            <h1>Observações do produto:</h1>
-          </MaxCard.Header>
           <MaxCard.Body>
+            <h3>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
                   key={item.codigo}
                   style={{
-                    borderBottom: '1px solid #3333',
-                    marginBottom: 20,
-                    paddingBottom: 10,
+                    borderBottom: '1px solid #3333'
                   }}
                 >
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Código da entrega: </span>
-                    <span style={{ color: 'gray' }}>{item.codigo_entrega}</span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Código Produto: </span>
-                    <span style={{ color: 'gray' }}>{item.codigo}</span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Descrição: </span>
-                    <span style={{ color: 'gray' }}>
-                      {item.descricao_produto}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Embalagem: </span>
-                    <span style={{ color: 'gray' }}>{item.embalagem}</span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Quantidade: </span>
-                    <span style={{ color: 'gray' }}>{item.quantidade}</span>
+                  <div style={{ fontSize: 13, display: 'flex',
+                        margin: 5, color: 'gray' }}>
+                    <span>{item.quantidade} x {item.descricao_produto}  ({item.codigo})</span>
                   </div>
                 </div>
               ))
@@ -256,18 +232,15 @@ export function CardCodOp() {
             marginBottom: 10,
           }}
         >
-          <MaxCard.Header>
-            <h1>Ocorrências:</h1>
-          </MaxCard.Header>
           <MaxCard.Body>
+            <h3>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
                 <div
                   key={index}
                   style={{
-                    borderRadius: 4,
-                    background: '#555',
-                    color: 'white',
+                
+                    borderBottom: '1px solid #3333',
                     width: '100%',
                     padding: 10,
                     marginBottom: 10,
@@ -276,10 +249,10 @@ export function CardCodOp() {
                     alignItems: 'center',
                   }}
                 >
-                  <h3 style={{ fontSize: 14, color: 'white' }}>
+                  <span style={{ fontSize: 14, color:"gray" }}>
                     {oc.ocorrencia?.descricao_ocorrencia}
-                  </h3>
-                  <span style={{ fontSize: 12 }}>
+                  </span>
+                  <span style={{ fontSize: 12, color:"gray" }}>
                     {oc.created_at
                       ? new Date(oc.created_at).toLocaleString()
                       : ''}

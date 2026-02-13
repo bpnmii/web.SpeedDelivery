@@ -149,7 +149,7 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
             }}
           >
             <Button disabled={loading || !selecionada}>
-              <span>{loading ? 'Aguarde...' : 'Enviar'}</span>
+              <span>{loading ? 'Aguarde...' : 'Confirmar'}</span>
             </Button>
           </div>
         </form>

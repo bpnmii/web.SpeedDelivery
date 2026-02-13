@@ -105,16 +105,38 @@ export function Card({ filterValue }: CardProps) {
                 backgroundColor: '#fff',
               }}
             >
-              <MaxCard.Header>
+              <MaxCard.Body>
                 <div
                   style={{
                     alignItems: 'center',
                     display: 'flex',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    gap: 10,
+                    gap:15
                   }}
                 >
+                  <i className="fa-solid fa-user"></i>
+                  <div >
+                    <h3 style={{ display: 'flex' }}>{entrega.nome_cliente}</h3>
+                    <span
+                      style={{
+                        fontSize: 13,
+                        display: 'flex',
+                        margin: 5,
+                      }}
+                    >
+                      {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                      {entrega.estado}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 13,
+                        display: 'flex',
+                        margin: 5,
+                      }}
+                    >
+                      Entrega N° {entrega.codigo_operacao} <br />
+                    </span>
+                  </div>
+
                   <div
                     style={{
                       fontWeight: 'bold',
@@ -127,38 +149,17 @@ export function Card({ filterValue }: CardProps) {
                       textAlign: 'center',
                       justifyContent: 'center',
                       color: 'white',
+                      marginBottom:50
                     }}
                   >
                     {entrega.sequencia_entrega}
                   </div>
-                  <h1 style={{ marginTop: 10 }}>
-                    CÓDIGO DA OPERAÇÃO:{' '}
-                    <span style={{ color: 'GrayText', fontSize: 20 }}>
-                      {entrega.codigo_operacao}
-                    </span>{' '}
-                  </h1>
-                </div>
-              </MaxCard.Header>
-              <MaxCard.Body>
-                <div style={{ fontSize: 15, marginBottom: 20 }}>
-                  <i className="fa-regular fa-user m-2"></i>
-                  <span>Nome cliente: </span>
-                  <span style={{ color: 'gray' }}>{entrega.nome_cliente}</span>
-                </div>
-
-                <div style={{ fontSize: 15 }}>
-                  <i className="fa-light fa-location-dot m-2"></i>
-                  <span>Endereço: </span>
-                  <span style={{ color: 'gray' }}>
-                    {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                    {entrega.estado}
-                  </span>
                 </div>
               </MaxCard.Body>
-              <MaxCard.Footer>
+              <MaxCard.Footer style={{padding:8}}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   {entrega.status_entrega === StatusEntregaEnum.NAO_INICIADO ? (
-                    <Button
+                    <Button 
                       onClick={() => {
                         Iniciar(entrega.codigo_operacao)
                         navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)

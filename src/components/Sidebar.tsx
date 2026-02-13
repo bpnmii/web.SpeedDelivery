@@ -21,7 +21,14 @@ export const SideBar = () => {
       isActive: handleActive('home'),
       name: 'Home',
       title: 'home',
-      pathTo: '/home',
+      pathTo: '/',
+    },
+    {
+      icon: 'fa-duotone fa-solid fa-check',
+      isActive: handleActive('check'),
+      name: 'Check',
+      title: 'check',
+      pathTo: '/finalizadas',
     },
     // {
     //   icon: 'fa-arrow-right-from-bracket',

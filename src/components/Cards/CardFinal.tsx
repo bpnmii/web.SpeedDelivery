@@ -4,42 +4,14 @@ import { Button, MaxCard } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-interface CardProps {
+interface CardFinalProps {
   filterValue?: string
 }
 
-export function Card({ filterValue }: CardProps) {
+export function CardFinal({ filterValue }: CardFinalProps) {
   const navigate = useNavigate()
   const [entregas, setEntregas] = useState<IEntregas[]>([])
   const [loading, setLoading] = useState(true)
-
-  async function Iniciar(codigo_operacao: number | any) {
-    try {
-      const codigo = Number(codigo_operacao)
-
-      const data = { status_entrega: StatusEntregaEnum.INICIADO }
-
-      await api.entregas.atualizarEntregas(codigo, data)
-
-      window.location.reload()
-    } catch (err: any) {
-      console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
-    }
-  }
-
-  async function Retomar(codigo_operacao: number | any) {
-    try {
-      const codigo = Number(codigo_operacao)
-
-      const data = { status_entrega: StatusEntregaEnum.INICIADO }
-
-      await api.entregas.atualizarEntregas(codigo, data)
-
-      window.location.reload()
-    } catch (err: any) {
-      console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
-    }
-  }
 
   useEffect(() => {
     api.entregas
@@ -67,10 +39,7 @@ export function Card({ filterValue }: CardProps) {
 
     return data.filter((entrega) => {
       return (
-        entrega.codigo_operacao
-          ?.toString()
-          .toLowerCase()
-          .includes(searchValue) ||
+        entrega.codigo_operacao?.toString().toLowerCase().includes(searchValue) ||
         entrega.nome_cliente?.toLowerCase().includes(searchValue) ||
         entrega.endereco?.toLowerCase().includes(searchValue) ||
         entrega.bairro?.toLowerCase().includes(searchValue) ||
@@ -80,13 +49,13 @@ export function Card({ filterValue }: CardProps) {
     })
   }
 
-  // Filtra as entregas que NÃO estão concluídas
-  const entregasAtivas = entregas.filter(
-    (entrega) => entrega.status_entrega !== StatusEntregaEnum.CONCLUIDO,
+  // Filtra as entregas concluídas
+  const entregasConcluidas = entregas.filter(
+    (entrega) => entrega.status_entrega === StatusEntregaEnum.CONCLUIDO
   )
 
   // Aplica o filtro de busca
-  const entregasFiltradas = filterEntregas(entregasAtivas)
+  const entregasFiltradas = filterEntregas(entregasConcluidas)
 
   if (loading) return <p>Carregando entregas...</p>
 
@@ -119,7 +88,7 @@ export function Card({ filterValue }: CardProps) {
                     style={{
                       fontWeight: 'bold',
                       fontSize: 20,
-                      background: '#508DDF',
+                      background: '#4CA78C',
                       borderRadius: 6,
                       width: 30,
                       alignItems: 'center',
@@ -143,7 +112,9 @@ export function Card({ filterValue }: CardProps) {
                 <div style={{ fontSize: 15, marginBottom: 20 }}>
                   <i className="fa-regular fa-user m-2"></i>
                   <span>Nome cliente: </span>
-                  <span style={{ color: 'gray' }}>{entrega.nome_cliente}</span>
+                  <span style={{ color: 'gray' }}>
+                    {entrega.nome_cliente}
+                  </span>
                 </div>
 
                 <div style={{ fontSize: 15 }}>
@@ -157,34 +128,17 @@ export function Card({ filterValue }: CardProps) {
               </MaxCard.Body>
               <MaxCard.Footer>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  {entrega.status_entrega === StatusEntregaEnum.NAO_INICIADO ? (
-                    <Button
-                      onClick={() => {
-                        Iniciar(entrega.codigo_operacao)
-                        navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)
-                      }}
-                    >
-                      <i className="fa-light fa-play"></i> <span>Iniciar</span>
-                    </Button>
-                  ) : entrega.status_entrega === StatusEntregaEnum.PAUSADO ? (
-                    <Button
-                      onClick={() => {
-                        Retomar(entrega.codigo_operacao)
-                        navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)
-                      }}
-                    >
-                      <i className="fa-solid fa-play"></i> <span>Retomar</span>
-                    </Button>
-                  ) : entrega.status_entrega === StatusEntregaEnum.INICIADO ? (
-                    <Button
-                      onClick={() => {
-                        Retomar(entrega.codigo_operacao)
-                        navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)
-                      }}
-                    >
-                      <i className="fa-solid fa-play"></i> <span>Retomar</span>
-                    </Button>
-                  ) : null}
+                  <Button
+                    style={{ background: '#4CA78C' }}
+                    onClick={() => {
+                      navigate(
+                        `/DetalheEntregaFinal/${entrega.codigo_operacao}`,
+                      )
+                    }}
+                  >
+                    <i className="fa-regular fa-eye"></i>{' '}
+                    <span>Ver detalhes</span>
+                  </Button>
                 </div>
               </MaxCard.Footer>
             </div>

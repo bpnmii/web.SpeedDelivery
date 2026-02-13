@@ -160,44 +160,6 @@ export function ResultadoEntrega() {
         )}
       </div>
 
-      <h3
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: 'flex',
-          marginBottom: 10,
-        }}
-      >
-        Observação
-      </h3>
-
-      <form action="">
-        <div
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            display: 'flex',
-            marginBottom: 30,
-          }}
-        >
-          <textarea
-            placeholder="Digite uma observação..."
-            value={observacao}
-            onChange={(e) => setObservacao(e.target.value)}
-            style={{
-              width: '350px',
-              minHeight: '100px',
-              padding: '12px 15px',
-              borderRadius: '12px',
-              border: '1px solid #dcdcdc',
-              outline: 'none',
-              fontSize: '16px',
-              resize: 'none',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-            }}
-          />
-        </div>
-
         <h3
           style={{
             alignItems: 'center',
@@ -288,6 +250,47 @@ export function ResultadoEntrega() {
             <span>Não Entregue</span>
           </Button>
         </div>
+
+      
+
+      <form action="">
+        <div
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+            marginBottom: 30,
+          }}
+        >
+          <h3
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          display: 'flex',
+          marginBottom: 10,
+        }}
+      >
+        Observação
+      </h3>
+          <textarea
+            placeholder="Digite uma observação..."
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            style={{
+              width: '350px',
+              minHeight: '100px',
+              padding: '12px 15px',
+              borderRadius: '12px',
+              border: '1px solid #dcdcdc',
+              outline: 'none',
+              fontSize: '16px',
+              resize: 'none',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+            }}
+          />
+        </div>
+
+        
 
         <footer
           style={{

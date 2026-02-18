@@ -153,13 +153,14 @@ export function Card({ filterValue }: CardProps) {
                       fontSize: 20,
                       background: '#508DDF',
                       borderRadius: 6,
-                      width: 30,
+                      padding: "2px 13px",
                       alignItems: 'center',
                       display: 'flex',
                       textAlign: 'center',
                       justifyContent: 'center',
                       color: 'white',
                       marginBottom: 50,
+                      
                     }}
                   >
                     {index + 1}

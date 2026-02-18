@@ -149,7 +149,7 @@ export function CardCodOp() {
                 <Button onClick={() => navigate('/')}>
                   <i className="fa-solid fa-arrow-left-long"></i>
                 </Button>
-                <Button onClick={tratarAbrirRota}>
+                <Button onClick={tratarAbrirRota} style={{ marginLeft:170}}>
                   <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
                   <span style={{ fontSize: 15 }}>Localizar</span>
                 </Button>
@@ -162,12 +162,12 @@ export function CardCodOp() {
               style={{
                 alignItems: 'center',
                 display: 'flex',
-                gap: 15,
+                gap: 5,
               }}
             >
               <i className="fa-solid fa-user"></i>
               <div>
-                <h3 style={{ display: 'flex' }}>{entrega.nome_cliente}</h3>
+                <h3 style={{ display: 'flex', margin: 5  }}>{entrega.nome_cliente}</h3>
                 <span
                   style={{
                     fontSize: 13,
@@ -193,7 +193,7 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Body>
-            <h3>Itens do pedido de entrega:</h3>
+            <h3 style={{margin:20}}>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
@@ -206,7 +206,7 @@ export function CardCodOp() {
                     style={{
                       fontSize: 13,
                       display: 'flex',
-                      margin: 5,
+                      margin: 20,
                       color: 'gray',
                     }}
                   >
@@ -233,29 +233,35 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Body>
-            <h3>Ocorrências:</h3>
+            <h3 style={{margin:20}}>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
                 <div
                   key={index}
                   style={{
                     borderBottom: '1px solid #3333',
-                    width: '100%',
-                    padding: 10,
-                    marginBottom: 10,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
                   }}
                 >
-                  <span style={{ fontSize: 14, color: 'gray' }}>
-                    {oc.ocorrencia?.descricao_ocorrencia}
-                  </span>
-                  <span style={{ fontSize: 12, color: 'gray' }}>
+                   <div
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 20,
+                      color: 'gray',
+                       gap:165
+                    }}
+                  >
+                    <span>
+                      {oc.ocorrencia?.descricao_ocorrencia}
+                    </span>
+                  
+
+                  <span >
                     {oc.created_at
                       ? new Date(oc.created_at).toLocaleString()
                       : ''}
                   </span>
+                  </div>
                 </div>
               ))
             ) : (

@@ -95,6 +95,15 @@ export function CardCodFinal() {
                   {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
                   {entrega.estado}
                 </span>
+                <span
+                  style={{
+                    fontSize: 13,
+                    display: 'flex',
+                    margin: 5,
+                  }}
+                >
+                  {entrega.status_resultado}
+                </span>
               </div>
             </div>
           </MaxCard.Body>
@@ -185,6 +194,19 @@ export function CardCodFinal() {
             ) : (
               <p>Nenhuma ocorrência registrada.</p>
             )}
+          </MaxCard.Body>
+        </div>
+      </MaxCard.Container>
+
+      <MaxCard.Container>
+         <div
+          style={{
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
+            borderRadius: 10,
+            marginBottom: 10,
+          }}>
+          <MaxCard.Body>
+            <h3 style={{margin:20}}>Galeria de imagens:</h3>
           </MaxCard.Body>
         </div>
       </MaxCard.Container>

@@ -13,7 +13,7 @@ export const Footer = () => {
             className="text-gray-800 text-hover-primary"
             rel="noreferrer"
           >
-            Desenvolvido por Max Scalla Informática | 2022
+            Desenvolvido por Max Scalla Informática | 2026
           </a>
         </div>
       </div>

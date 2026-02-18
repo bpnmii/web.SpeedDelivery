@@ -95,15 +95,45 @@ export function CardCodFinal() {
                   {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
                   {entrega.estado}
                 </span>
-                <span
-                  style={{
-                    fontSize: 13,
-                    display: 'flex',
-                    margin: 5,
-                  }}
-                >
-                  {entrega.status_resultado}
-                </span>
+                {entrega.status_resultado ===
+                  StatusResultadoEnum.ENTREGA_PARCIAL && (
+                  <span
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 5,
+                      color: 'orange',
+                    }}
+                  >
+                    Entregue parcialmente
+                  </span>
+                )}
+                {entrega.status_resultado ===
+                  StatusResultadoEnum.ENTREGA_TOTAL && (
+                  <span
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 5,
+                      color: 'green',
+                    }}
+                  >
+                    Entregue totalmente
+                  </span>
+                )}
+                {entrega.status_resultado ===
+                  StatusResultadoEnum.NAO_ENTREGUE && (
+                  <span
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 5,
+                      color: 'red',
+                    }}
+                  >
+                    Não entregue
+                  </span>
+                )}
               </div>
             </div>
           </MaxCard.Body>
@@ -119,7 +149,7 @@ export function CardCodFinal() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{margin:20}}>Itens do pedido de entrega:</h3>
+            <h3 style={{ margin: 20 }}>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
@@ -159,10 +189,9 @@ export function CardCodFinal() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{margin:20}}>Ocorrências:</h3>
+            <h3 style={{ margin: 20 }}>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
-
                 <div
                   key={index}
                   style={{
@@ -175,19 +204,16 @@ export function CardCodFinal() {
                       display: 'flex',
                       margin: 20,
                       color: 'gray',
-                       gap:73
+                      gap: 73,
                     }}
                   >
-                    <span>
-                      {oc.ocorrencia?.descricao_ocorrencia}
-                    </span>
-                  
+                    <span>{oc.ocorrencia?.descricao_ocorrencia}</span>
 
-                  <span >
-                    {oc.created_at
-                      ? new Date(oc.created_at).toLocaleString()
-                      : ''}
-                  </span>
+                    <span>
+                      {oc.created_at
+                        ? new Date(oc.created_at).toLocaleString()
+                        : ''}
+                    </span>
                   </div>
                 </div>
               ))
@@ -199,14 +225,43 @@ export function CardCodFinal() {
       </MaxCard.Container>
 
       <MaxCard.Container>
-         <div
+        <div
           style={{
             boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
             borderRadius: 10,
             marginBottom: 10,
-          }}>
+          }}
+        >
           <MaxCard.Body>
-            <h3 style={{margin:20}}>Galeria de imagens:</h3>
+            <h3 style={{ margin: 20 }}>Galeria de imagens:</h3>
+
+            {entrega.imagem && entrega.imagem.length > 0 ? (
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 10,
+                  margin: 20,
+                }}
+              >
+                {entrega.imagem.map((img, index) => (
+                  <img
+                    key={index}
+                    src={`http://localhost:3333/uploads/${img}`}
+                    alt={`imagem-${index}`}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      objectFit: 'cover',
+                      borderRadius: 8,
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p style={{ margin: 20 }}>Nenhuma imagem cadastrada.</p>
+            )}
           </MaxCard.Body>
         </div>
       </MaxCard.Container>

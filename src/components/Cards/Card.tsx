@@ -114,27 +114,33 @@ export function Card({ filterValue }: CardProps) {
                   }}
                 >
                   <i className="fa-solid fa-user"></i>
+                  
                   <div >
-                    <h3 style={{ display: 'flex' }}>{entrega.nome_cliente}</h3>
+                    <h3
+                      style={{ display: 'flex', margin:5 }}>
+                        Entrega N° {entrega.codigo_operacao} 
+                    </h3>
+
+                    <span   
+                      style={{
+                        fontSize: 13,
+                        display: 'flex',
+                        margin: 5,
+                        marginTop:8
+                      }}>
+                        {entrega.nome_cliente}
+                    </span>
+
                     <span
                       style={{
                         fontSize: 13,
                         display: 'flex',
                         margin: 5,
-                      }}
-                    >
-                      {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                      {entrega.estado}
+                      }}>
+                        {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                        {entrega.estado}
                     </span>
-                    <span
-                      style={{
-                        fontSize: 13,
-                        display: 'flex',
-                        margin: 5,
-                      }}
-                    >
-                      Entrega N° {entrega.codigo_operacao} <br />
-                    </span>
+                    
                   </div>
 
                   <div

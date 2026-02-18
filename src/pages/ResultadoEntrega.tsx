@@ -80,203 +80,109 @@ export function ResultadoEntrega() {
 
   return (
     <div className="max-container">
-      <div style={{ textAlign: 'center', marginBottom: 20 }}>
-        <div style={{ display: 'flex', gap: 200 }}>
-          <Button
-            //CORRIGIR
-            onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
-          >
-            <i className="fa-solid fa-arrow-left-long"></i>
-          </Button>
-
-          <Button
-            onClick={() => cameraRef.current?.click()}
-            // style={{
-            //   width: 58,
-            //   height: 60,
-            // }}
-          >
-            <i className="fa-solid fa-camera"></i>
-            Adicionar imagem
-          </Button>
-        </div>
-
-        {/* Câmera */}
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          capture="environment"
-          ref={cameraRef}
-          style={{ display: 'none' }}
-          onChange={handleImagem}
-        />
-
-        {preview && (
-          <div
-            style={{
-              marginTop: 20,
-              display: 'flex',
-              gap: 10,
-              flexWrap: 'wrap',
-            }}
-          >
-            {preview.map((preview, index) => (
-              <div
-                key={index}
-                style={{ position: 'relative', display: 'inline-block' }}
-              >
-                <img
-                  src={preview}
-                  alt="preview"
-                  style={{
-                    width: 120,
-                    height: 120,
-                    objectFit: 'cover',
-                    borderRadius: 8,
-                  }}
-                />
-
-                <button
-                  onClick={() => removerImagem(index)}
-                  style={{
-                    position: 'absolute',
-                    top: -8,
-                    right: -8,
-                    background: 'red',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: 22,
-                    height: 22,
-                    cursor: 'pointer',
-                  }}
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-        <h3
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            display: 'flex',
-            margin: 20,
-          }}
-        >
-          Status da entrega:
-        </h3>
-
-        <div
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            display: 'flex',
-            gap: 8,
-            marginBottom: 40,
-          }}
-        >
-          <Button
-            style={{
-              width: 120,
-              height: 60,
-              background:
-                hovered === StatusResultadoEnum.ENTREGA_TOTAL
-                  ? '#0f8a0f'
-                  : 'green',
-              transform:
-                hovered === StatusResultadoEnum.ENTREGA_TOTAL
-                  ? 'scale(1.05)'
-                  : 'scale(1)',
-              transition: '0.2s',
-            }}
-            onMouseEnter={() => setHovered(StatusResultadoEnum.ENTREGA_TOTAL)}
-            onMouseLeave={() => setHovered(null)}
-            onClick={() =>
-              setStatusResultado(StatusResultadoEnum.ENTREGA_TOTAL)
-            }
-          >
-            <i className="fa-regular fa-circle-check"></i>
-            <span>Entrega Total</span>
-          </Button>
-
-          <Button
-            style={{
-              width: 120,
-              height: 60,
-              background:
-                hovered === StatusResultadoEnum.ENTREGA_PARCIAL
-                  ? '#cc8400'
-                  : 'orange',
-              transform:
-                hovered === StatusResultadoEnum.ENTREGA_PARCIAL
-                  ? 'scale(1.05)'
-                  : 'scale(1)',
-              transition: '0.2s',
-            }}
-            onMouseEnter={() => setHovered(StatusResultadoEnum.ENTREGA_PARCIAL)}
-            onMouseLeave={() => setHovered(null)}
-            onClick={() =>
-              setStatusResultado(StatusResultadoEnum.ENTREGA_PARCIAL)
-            }
-          >
-            <i className="fa-solid fa-circle-exclamation"></i>
-            <span>Entrega Parcial</span>
-          </Button>
-
-          <Button
-            style={{
-              width: 120,
-              height: 60,
-              background:
-                hovered === StatusResultadoEnum.NAO_ENTREGUE
-                  ? '#b30000'
-                  : 'red',
-              transform:
-                hovered === StatusResultadoEnum.NAO_ENTREGUE
-                  ? 'scale(1.05)'
-                  : 'scale(1)',
-              transition: '0.2s',
-            }}
-            onMouseEnter={() => setHovered(StatusResultadoEnum.NAO_ENTREGUE)}
-            onMouseLeave={() => setHovered(null)}
-            onClick={() => setStatusResultado(StatusResultadoEnum.NAO_ENTREGUE)}
-          >
-            <i className="fa-solid fa-circle-xmark"></i>
-            <span>Não Entregue</span>
-          </Button>
-        </div>
-
-      
-
       <form action="">
-        <div
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            display: 'flex',
-            marginBottom: 30,
-          }}
-        >
+        <div style={{ textAlign: 'center', marginBottom: 20 }}>
+          <div style={{ display: 'flex', gap: 200 }}>
+            <Button
+              //CORRIGIR
+              onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
+            >
+              <i className="fa-solid fa-arrow-left-long"></i>
+            </Button>
+
+            <Button
+              onClick={() => cameraRef.current?.click()}
+              // style={{
+              //   width: 58,
+              //   height: 60,
+              // }}
+            >
+              <i className="fa-solid fa-camera"></i>
+              Adicionar imagem
+            </Button>
+          </div>
+
+          {/* Câmera */}
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            capture="environment"
+            ref={cameraRef}
+            style={{ display: 'none' }}
+            onChange={handleImagem}
+          />
+
+          {preview && (
+            <div
+              style={{
+                marginTop: 20,
+                display: 'flex',
+                gap: 10,
+                flexWrap: 'wrap',
+              }}
+            >
+              {preview.map((preview, index) => (
+                <div
+                  key={index}
+                  style={{ position: 'relative', display: 'inline-block' }}
+                >
+                  <img
+                    src={preview}
+                    alt="preview"
+                    style={{
+                      width: 120,
+                      height: 120,
+                      objectFit: 'cover',
+                      borderRadius: 8,
+                    }}
+                  />
+
+                  <button
+                    onClick={() => removerImagem(index)}
+                    style={{
+                      position: 'absolute',
+                      top: -8,
+                      right: -8,
+                      background: 'red',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: 22,
+                      height: 22,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div style={{ flexDirection: 'column' }}>
           <h3
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: 'flex',
-          marginBottom: 10,
-        }}
-      >
-        Observação
-      </h3>
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              display: 'flex',
+              marginBottom: 10,
+            }}
+          >
+            Observação
+          </h3>
+
           <textarea
             placeholder="Digite uma observação..."
             value={observacao}
             onChange={(e) => setObservacao(e.target.value)}
             style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              display: 'flex',
+
+              marginLeft: 27,
               width: '350px',
               minHeight: '100px',
               padding: '12px 15px',
@@ -290,7 +196,158 @@ export function ResultadoEntrega() {
           />
         </div>
 
-        
+        <div>
+          <h3
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              display: 'flex',
+              margin: 20,
+            }}
+          >
+            Status da entrega:
+          </h3>
+
+          <div
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              display: 'flex',
+              gap: 20,
+              marginBottom: 40,
+            }}
+          >
+            <label
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                padding: '10px',
+                borderRadius: '8px',
+                background:
+                  status_resultado === StatusResultadoEnum.ENTREGA_TOTAL
+                    ? '#e8f5e9'
+                    : 'transparent',
+                transition: '0.2s',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={status_resultado === StatusResultadoEnum.ENTREGA_TOTAL}
+                onChange={() =>
+                  setStatusResultado(StatusResultadoEnum.ENTREGA_TOTAL)
+                }
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  accentColor: 'green',
+                  cursor: 'pointer',
+                  marginBottom: '8px',
+                }}
+              />
+              <i
+                className="fa-regular fa-circle-check"
+                style={{
+                  color: 'green',
+                  fontSize: '20px',
+                  marginBottom: '4px',
+                }}
+              ></i>
+              <span
+                style={{ fontSize: '14px', color: 'green', fontWeight: '500' }}
+              >
+                Entrega Total
+              </span>
+            </label>
+
+            <label
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                padding: '10px',
+                borderRadius: '8px',
+                background:
+                  status_resultado === StatusResultadoEnum.ENTREGA_PARCIAL
+                    ? '#fff3e0'
+                    : 'transparent',
+                transition: '0.2s',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={
+                  status_resultado === StatusResultadoEnum.ENTREGA_PARCIAL
+                }
+                onChange={() =>
+                  setStatusResultado(StatusResultadoEnum.ENTREGA_PARCIAL)
+                }
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  accentColor: 'orange',
+                  cursor: 'pointer',
+                  marginBottom: '8px',
+                }}
+              />
+              <i
+                className="fa-solid fa-circle-exclamation"
+                style={{
+                  color: 'orange',
+                  fontSize: '20px',
+                  marginBottom: '4px',
+                }}
+              ></i>
+              <span
+                style={{ fontSize: '14px', color: 'orange', fontWeight: '500' }}
+              >
+                Entrega Parcial
+              </span>
+            </label>
+
+            <label
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                padding: '10px',
+                borderRadius: '8px',
+                background:
+                  status_resultado === StatusResultadoEnum.NAO_ENTREGUE
+                    ? '#ffebee'
+                    : 'transparent',
+                transition: '0.2s',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={status_resultado === StatusResultadoEnum.NAO_ENTREGUE}
+                onChange={() =>
+                  setStatusResultado(StatusResultadoEnum.NAO_ENTREGUE)
+                }
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  accentColor: 'red',
+                  cursor: 'pointer',
+                  marginBottom: '8px',
+                }}
+              />
+              <i
+                className="fa-solid fa-circle-xmark"
+                style={{ color: 'red', fontSize: '20px', marginBottom: '4px' }}
+              ></i>
+              <span
+                style={{ fontSize: '14px', color: 'red', fontWeight: '500' }}
+              >
+                Não Entregue
+              </span>
+            </label>
+          </div>
+        </div>
 
         <footer
           style={{
@@ -310,7 +367,7 @@ export function ResultadoEntrega() {
               height: 60,
             }}
           >
-            <span style={{fontSize:17}}>Salvar</span>
+            <span style={{ fontSize: 17 }}>Salvar</span>
           </Button>
         </footer>
       </form>

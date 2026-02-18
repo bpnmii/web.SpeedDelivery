@@ -234,19 +234,17 @@ export function CardCodFinal() {
         >
           <MaxCard.Body>
             <h3 style={{ margin: 20 }}>Observações:</h3>
-            {itensPedido && itensPedido.length > 0 ? (
-              itensPedido.map((item) => (
-                <span
-                  style={{
-                    fontSize: 13,
-                    display: 'flex',
-                    margin: 20,
-                    color: 'gray',
-                  }}
-                >
-                  {entrega.observacao}
-                </span>
-              ))
+            {entrega.observacao && entrega.observacao.length > 0 ? (
+              <span
+                style={{
+                  fontSize: 13,
+                  display: 'flex',
+                  margin: 20,
+                  color: 'gray',
+                }}
+              >
+                {entrega.observacao}
+              </span>
             ) : (
               <span
                 style={{
@@ -256,7 +254,7 @@ export function CardCodFinal() {
                   color: 'gray',
                 }}
               >
-                Nenhum observação escrita.
+                Nenhuma observação escrita.
               </span>
             )}
           </MaxCard.Body>

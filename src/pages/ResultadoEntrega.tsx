@@ -96,7 +96,7 @@ export function ResultadoEntrega() {
 
   return (
     <div className="max-container">
-      <form action="">
+      
         <div style={{ textAlign: 'center', marginBottom: 20 }}>
           <div style={{ display: 'flex', gap: 200 }}>
             <Button
@@ -176,7 +176,7 @@ export function ResultadoEntrega() {
             </div>
           )}
         </div>
-
+      <form action="">
         <div style={{ flexDirection: 'column' }}>
           <h3
             style={{

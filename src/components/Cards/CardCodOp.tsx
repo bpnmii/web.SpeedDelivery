@@ -21,74 +21,58 @@ export function CardCodOp() {
   const [ocorrencias, setOcorrencias] = useState<IOcorrenciasEntrega[]>([])
 
   // --- FUNÇÃO DE LOCALIZAÇÃO COM ALTA PRECISÃO ---
-  async function tratarAbrirRota(cep: string) {
-    const cleanCep = cep.replace(/\D/g, '')
-    if (cleanCep.length !== 8) return
-
-    try {
-      // 1. Busca o endereço pelo CEP
-      const responseCep = await fetch(
-        `https://viacep.com.br/ws/${cleanCep}/json/`,
-      )
-      const dadosEndereco = await responseCep.json()
-
-      if (dadosEndereco.erro) {
-        alert('CEP não encontrado.')
-        return
-      }
-
-      // 2. Transforma o endereço em Latitude/Longitude (Geocoding)
-      const query = `${dadosEndereco.logradouro}, ${dadosEndereco.localidade}, BR`
-      const responseGeocode = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query,
-        )}`,
-        { headers: { 'User-Agent': 'MaxScallaApp/1.0' } },
-      )
-      const dadosGeocode = await responseGeocode.json()
-
-      if (dadosGeocode.length === 0) {
-        alert('Não foi possível obter as coordenadas para este endereço.')
-        return
-      }
-
-      const latDestino = dadosGeocode[0].lat
-      const lonDestino = dadosGeocode[0].lon
-
-      // --- CONFIGURAÇÃO PARA LOCALIZAÇÃO EXATA ---
-      const geoOptions = {
-        enableHighAccuracy: true, // Força o uso do GPS (Alta Precisão)
-        timeout: 10000, // Espera até 10 segundos
-        maximumAge: 0, // Não usa localização em cache
-      }
-
-      // 3. Obtém a localização atual e abre o Google Maps
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${latDestino},${lonDestino}&travelmode=driving`
-          if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            window.location.href = url
-          } else {
-            window.open(url, '_blank')
-          }
-        },
-        (error) => {
-          console.warn('Erro ao obter GPS preciso, usando fallback:', error)
-          // Fallback: abre apenas o ponto de destino
-          const urlFallback = `https://www.google.com/maps/search/?api=1&query=${latDestino},${lonDestino}`
-          if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            window.location.href = urlFallback
-          } else {
-            window.open(urlFallback, '_blank')
-          }
-        },
-        geoOptions, // Aplica as opções de precisão aqui
-      )
-    } catch (error) {
-      console.error('Erro ao processar rota:', error)
-      alert('Ocorreu um erro ao tentar localizar o endereço.')
+  async function tratarAbrirRota() {
+    if (!entrega) {
+      console.log('❌ Entrega não encontrada')
+      return
     }
+
+    console.log('🚀 Iniciando rota com Google Maps')
+
+    const enderecoDestino = `
+    ${entrega.endereco},
+    ${entrega.bairro},
+    ${entrega.cidade},
+    ${entrega.estado},
+    ${entrega.CEP},
+    Brasil
+  `
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    console.log('📍 Destino:', enderecoDestino)
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, accuracy } = position.coords
+
+        console.log('📡 Localização atual:', latitude, longitude)
+        console.log('🎯 Precisão (metros):', accuracy)
+
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${encodeURIComponent(
+          enderecoDestino,
+        )}&travelmode=driving`
+
+        console.log('🗺️ URL gerada:', url)
+
+        window.open(url, '_blank')
+      },
+      (error) => {
+        console.log('❌ Erro ao obter GPS:', error)
+
+        // fallback: abre só destino
+        const urlFallback = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          enderecoDestino,
+        )}`
+
+        window.open(urlFallback, '_blank')
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0,
+      },
+    )
   }
 
   async function Pausar() {
@@ -96,6 +80,10 @@ export function CardCodOp() {
       const codigo = Number(codigo_operacao)
       const data = { status_entrega: StatusEntregaEnum.PAUSADO }
       await api.entregas.atualizarEntregas(codigo, data)
+      await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
+        codigo_entrega: Number(codigo_operacao),
+        codigo_ocorrencia: Number(2),
+      })
       window.location.reload()
     } catch (err: any) {
       console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
@@ -107,6 +95,10 @@ export function CardCodOp() {
       const codigo = Number(codigo_operacao)
       const data = { status_entrega: StatusEntregaEnum.INICIADO }
       await api.entregas.atualizarEntregas(codigo, data)
+      await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
+        codigo_entrega: Number(codigo_operacao),
+        codigo_ocorrencia: Number(3),
+      })
       window.location.reload()
     } catch (err: any) {
       console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
@@ -157,7 +149,7 @@ export function CardCodOp() {
                 <Button onClick={() => navigate('/')}>
                   <i className="fa-solid fa-arrow-left-long"></i>
                 </Button>
-                <Button onClick={() => tratarAbrirRota(entrega.CEP)}>
+                <Button onClick={tratarAbrirRota}>
                   <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
                   <span style={{ fontSize: 15 }}>Localizar</span>
                 </Button>
@@ -167,27 +159,26 @@ export function CardCodOp() {
 
           <MaxCard.Body>
             <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                gap: 15,
+              }}
+            >
+              <i className="fa-solid fa-user"></i>
+              <div>
+                <h3 style={{ display: 'flex' }}>{entrega.nome_cliente}</h3>
+                <span
                   style={{
-                    alignItems: 'center',
+                    fontSize: 13,
                     display: 'flex',
-                    gap:15
+                    margin: 5,
                   }}
                 >
-                  <i className="fa-solid fa-user"></i>
-                  <div >
-                    <h3 style={{ display: 'flex' }}>{entrega.nome_cliente}</h3>
-                    <span
-                      style={{
-                        fontSize: 13,
-                        display: 'flex',
-                        margin: 5,
-                      }}
-                    >
-                      {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                      {entrega.estado}
-                    </span>
-                  </div>
-
+                  {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                  {entrega.estado}
+                </span>
+              </div>
             </div>
           </MaxCard.Body>
         </div>
@@ -208,12 +199,21 @@ export function CardCodOp() {
                 <div
                   key={item.codigo}
                   style={{
-                    borderBottom: '1px solid #3333'
+                    borderBottom: '1px solid #3333',
                   }}
                 >
-                  <div style={{ fontSize: 13, display: 'flex',
-                        margin: 5, color: 'gray' }}>
-                    <span>{item.quantidade} x {item.descricao_produto}  ({item.codigo})</span>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 5,
+                      color: 'gray',
+                    }}
+                  >
+                    <span>
+                      {item.quantidade} x {item.descricao_produto} (
+                      {item.codigo})
+                    </span>
                   </div>
                 </div>
               ))
@@ -239,7 +239,6 @@ export function CardCodOp() {
                 <div
                   key={index}
                   style={{
-                
                     borderBottom: '1px solid #3333',
                     width: '100%',
                     padding: 10,
@@ -249,10 +248,10 @@ export function CardCodOp() {
                     alignItems: 'center',
                   }}
                 >
-                  <span style={{ fontSize: 14, color:"gray" }}>
+                  <span style={{ fontSize: 14, color: 'gray' }}>
                     {oc.ocorrencia?.descricao_ocorrencia}
                   </span>
-                  <span style={{ fontSize: 12, color:"gray" }}>
+                  <span style={{ fontSize: 12, color: 'gray' }}>
                     {oc.created_at
                       ? new Date(oc.created_at).toLocaleString()
                       : ''}

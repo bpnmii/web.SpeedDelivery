@@ -20,6 +20,10 @@ export function Card({ filterValue }: CardProps) {
       const data = { status_entrega: StatusEntregaEnum.INICIADO }
 
       await api.entregas.atualizarEntregas(codigo, data)
+      await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
+        codigo_entrega: Number(codigo_operacao),
+        codigo_ocorrencia: Number(1),
+      })
 
       window.location.reload()
     } catch (err: any) {
@@ -93,7 +97,7 @@ export function Card({ filterValue }: CardProps) {
   return (
     <>
       {entregasFiltradas && entregasFiltradas.length > 0 ? (
-        entregasFiltradas.map((entrega) => (
+        entregasFiltradas.map((entrega, index) => (
           <MaxCard.Container
             key={entrega.codigo_operacao}
             style={{ marginBottom: '20px' }}
@@ -110,25 +114,25 @@ export function Card({ filterValue }: CardProps) {
                   style={{
                     alignItems: 'center',
                     display: 'flex',
-                    gap:15
+                    gap: 5,
                   }}
                 >
                   <i className="fa-solid fa-user"></i>
-                  
-                  <div >
-                    <h3
-                      style={{ display: 'flex', margin:5 }}>
-                        Entrega N° {entrega.codigo_operacao} 
+
+                  <div>
+                    <h3 style={{ display: 'flex', margin: 5 }}>
+                      Entrega N° {entrega.codigo_operacao}
                     </h3>
 
-                    <span   
+                    <span
                       style={{
                         fontSize: 13,
                         display: 'flex',
                         margin: 5,
-                        marginTop:8
-                      }}>
-                        {entrega.nome_cliente}
+                        marginTop: 8,
+                      }}
+                    >
+                      {entrega.nome_cliente}
                     </span>
 
                     <span
@@ -136,11 +140,11 @@ export function Card({ filterValue }: CardProps) {
                         fontSize: 13,
                         display: 'flex',
                         margin: 5,
-                      }}>
-                        {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                        {entrega.estado}
+                      }}
+                    >
+                      {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                      {entrega.estado}
                     </span>
-                    
                   </div>
 
                   <div
@@ -155,17 +159,17 @@ export function Card({ filterValue }: CardProps) {
                       textAlign: 'center',
                       justifyContent: 'center',
                       color: 'white',
-                      marginBottom:50
+                      marginBottom: 50,
                     }}
                   >
-                    {entrega.sequencia_entrega}
+                    {index + 1}
                   </div>
                 </div>
               </MaxCard.Body>
-              <MaxCard.Footer style={{padding:8}}>
+              <MaxCard.Footer style={{ padding: 8 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   {entrega.status_entrega === StatusEntregaEnum.NAO_INICIADO ? (
-                    <Button 
+                    <Button
                       onClick={() => {
                         Iniciar(entrega.codigo_operacao)
                         navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)

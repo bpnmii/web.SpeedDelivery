@@ -64,11 +64,27 @@ export function ResultadoEntrega() {
       formData.append('status_resultado', status_resultado)
       formData.append('status_entrega', StatusEntregaEnum.CONCLUIDO)
 
+      if (
+        (status_resultado === StatusResultadoEnum.NAO_ENTREGUE ||
+          status_resultado === StatusResultadoEnum.ENTREGA_PARCIAL) &&
+        imagem.length === 0
+      ) {
+        notifyError({
+          message:
+            'É obrigatório adicionar ao menos uma imagem para este tipo de resultado.',
+        })
+        return
+      }
+
       imagem.forEach((file) => {
         formData.append('imagem', file)
       })
 
       await api.entregas.atualizarEntregas(codigo, formData)
+      await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
+        codigo_entrega: Number(codigo_operacao),
+        codigo_ocorrencia: Number(4),
+      })
 
       navigate('/')
     } catch (err: any) {
@@ -246,7 +262,7 @@ export function ResultadoEntrega() {
                   marginBottom: '8px',
                 }}
               />
-              
+
               <span
                 style={{ fontSize: '14px', color: 'green', fontWeight: '500' }}
               >

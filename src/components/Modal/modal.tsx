@@ -131,14 +131,18 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
             <option value="">
               {loading ? 'Carregando...' : 'Selecione uma ocorrência'}
             </option>
-            {ocorrencias.map((item) => (
-              <option
-                key={item.codigo_ocorrencia}
-                value={item.codigo_ocorrencia}
-              >
-                {item.descricao_ocorrencia}
-              </option>
-            ))}
+            {ocorrencias
+              .filter(
+                (item) => ![1, 2, 3].includes(Number(item.codigo_ocorrencia)),
+              )
+              .map((item) => (
+                <option
+                  key={item.codigo_ocorrencia}
+                  value={item.codigo_ocorrencia}
+                >
+                  {item.descricao_ocorrencia}
+                </option>
+              ))}
           </select>
 
           <div

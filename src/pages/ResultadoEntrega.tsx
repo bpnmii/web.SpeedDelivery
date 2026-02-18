@@ -246,14 +246,7 @@ export function ResultadoEntrega() {
                   marginBottom: '8px',
                 }}
               />
-              <i
-                className="fa-regular fa-circle-check"
-                style={{
-                  color: 'green',
-                  fontSize: '20px',
-                  marginBottom: '4px',
-                }}
-              ></i>
+              
               <span
                 style={{ fontSize: '14px', color: 'green', fontWeight: '500' }}
               >
@@ -292,14 +285,6 @@ export function ResultadoEntrega() {
                   marginBottom: '8px',
                 }}
               />
-              <i
-                className="fa-solid fa-circle-exclamation"
-                style={{
-                  color: 'orange',
-                  fontSize: '20px',
-                  marginBottom: '4px',
-                }}
-              ></i>
               <span
                 style={{ fontSize: '14px', color: 'orange', fontWeight: '500' }}
               >
@@ -336,10 +321,6 @@ export function ResultadoEntrega() {
                   marginBottom: '8px',
                 }}
               />
-              <i
-                className="fa-solid fa-circle-xmark"
-                style={{ color: 'red', fontSize: '20px', marginBottom: '4px' }}
-              ></i>
               <span
                 style={{ fontSize: '14px', color: 'red', fontWeight: '500' }}
               >

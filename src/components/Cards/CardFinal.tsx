@@ -74,56 +74,43 @@ export function CardFinal({ filterValue }: CardFinalProps) {
                 backgroundColor: '#fff',
               }}
             >
-              <MaxCard.Header>
+              <MaxCard.Body>
                 <div
                   style={{
                     alignItems: 'center',
                     display: 'flex',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    gap: 10,
+                    gap:5
                   }}
                 >
-                  <div
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: 20,
-                      background: '#4CA78C',
-                      borderRadius: 6,
-                      width: 30,
-                      alignItems: 'center',
-                      display: 'flex',
-                      textAlign: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                    }}
-                  >
-                    {entrega.sequencia_entrega}
-                  </div>
-                  <h1 style={{ marginTop: 10 }}>
-                    CÓDIGO DA OPERAÇÃO:{' '}
-                    <span style={{ color: 'GrayText', fontSize: 20 }}>
-                      {entrega.codigo_operacao}
-                    </span>{' '}
-                  </h1>
-                </div>
-              </MaxCard.Header>
-              <MaxCard.Body>
-                <div style={{ fontSize: 15, marginBottom: 20 }}>
-                  <i className="fa-regular fa-user m-2"></i>
-                  <span>Nome cliente: </span>
-                  <span style={{ color: 'gray' }}>
-                    {entrega.nome_cliente}
-                  </span>
-                </div>
+                  <i className="fa-solid fa-user"></i>
+                  
+                  <div >
+                    <h3
+                      style={{ display: 'flex', margin:5 }}>
+                        Entrega N° {entrega.codigo_operacao} 
+                    </h3>
 
-                <div style={{ fontSize: 15 }}>
-                  <i className="fa-light fa-location-dot m-2"></i>
-                  <span>Endereço: </span>
-                  <span style={{ color: 'gray' }}>
-                    {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                    {entrega.estado}
-                  </span>
+                    <span   
+                      style={{
+                        fontSize: 13,
+                        display: 'flex',
+                        margin: 5,
+                        marginTop:8
+                      }}>
+                        {entrega.nome_cliente}
+                    </span>
+
+                    <span
+                      style={{
+                        fontSize: 13,
+                        display: 'flex',
+                        margin: 5,
+                      }}>
+                        {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                        {entrega.estado}
+                    </span>
+                    
+                  </div>
                 </div>
               </MaxCard.Body>
               <MaxCard.Footer>

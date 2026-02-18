@@ -105,7 +105,7 @@ export function CardCodFinal() {
                       color: 'orange',
                     }}
                   >
-                    Entregue parcialmente
+                    Entregue parcialmente concluída
                   </span>
                 )}
                 {entrega.status_resultado ===
@@ -118,7 +118,7 @@ export function CardCodFinal() {
                       color: 'green',
                     }}
                   >
-                    Entregue totalmente
+                    Entrega concluída
                   </span>
                 )}
                 {entrega.status_resultado ===
@@ -219,6 +219,45 @@ export function CardCodFinal() {
               ))
             ) : (
               <p>Nenhuma ocorrência registrada.</p>
+            )}
+          </MaxCard.Body>
+        </div>
+      </MaxCard.Container>
+
+      <MaxCard.Container>
+        <div
+          style={{
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
+            borderRadius: 10,
+            marginBottom: 10,
+          }}
+        >
+          <MaxCard.Body>
+            <h3 style={{ margin: 20 }}>Observações:</h3>
+            {itensPedido && itensPedido.length > 0 ? (
+              itensPedido.map((item) => (
+                <span
+                  style={{
+                    fontSize: 13,
+                    display: 'flex',
+                    margin: 20,
+                    color: 'gray',
+                  }}
+                >
+                  {entrega.observacao}
+                </span>
+              ))
+            ) : (
+              <span
+                style={{
+                  fontSize: 13,
+                  display: 'flex',
+                  margin: 20,
+                  color: 'gray',
+                }}
+              >
+                Nenhum observação escrita.
+              </span>
             )}
           </MaxCard.Body>
         </div>

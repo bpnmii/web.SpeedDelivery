@@ -73,61 +73,29 @@ export function CardCodFinal() {
           </MaxCard.Header>
 
           <MaxCard.Body>
-            <div>
-              <h2>
-                CÓDIGO DA OPERAÇÃO:{' '}
-                <span style={{ color: '#4CA78C', fontSize: 20 }}>
-                  {entrega.codigo_operacao}
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                gap: 5,
+              }}
+            >
+              <i className="fa-solid fa-user"></i>
+              <div>
+                <h3 style={{ display: 'flex', margin: 5 }}>
+                  {entrega.nome_cliente}
+                </h3>
+                <span
+                  style={{
+                    fontSize: 13,
+                    display: 'flex',
+                    margin: 5,
+                  }}
+                >
+                  {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
+                  {entrega.estado}
                 </span>
-              </h2>
-            </div>
-            <div style={{ fontSize: 15, marginBottom: 20 }}>
-              <h3>
-                Entrega sequencial:
-                <span style={{ color: '#4CA78C' }}>
-                  {entrega.sequencia_entrega}
-                </span>
-              </h3>
-            </div>
-            <div style={{ fontSize: 15, marginBottom: 20 }}>
-              <i className="fa-regular fa-user m-2"></i>
-              <span style={{ color: 'gray' }}>{entrega.nome_cliente}</span>
-            </div>
-            <div style={{ fontSize: 15 }}>
-              <i className="fa-light fa-location-dot m-2"></i>
-              <span style={{ color: 'gray' }}>{entrega.endereco}</span>
-              <br />
-              <span style={{ color: 'gray' }}>
-                {entrega.bairro}, {entrega.cidade} - {entrega.estado}
-              </span>
-              <br />
-              <span style={{ color: 'gray' }}>CEP: {entrega.CEP}</span>
-              <br />
-              <span style={{ color: '4CA78C' }}>
-                Status Entrega:{' '}
-                <span style={{ color: '#4CA78C', fontWeight: 'bold' }}>
-                  Concluído
-                </span>
-              </span>
-              <br />
-              <span style={{ color: '4CA78C' }}>
-                Status do resultado:{' '}
-                {entrega.status_resultado ===
-                StatusResultadoEnum.ENTREGA_TOTAL ? (
-                  <span style={{ color: '#4CA78C', fontWeight: 'bold' }}>
-                    Entrega total
-                  </span>
-                ) : entrega.status_resultado ===
-                  StatusResultadoEnum.ENTREGA_PARCIAL ? (
-                  <span style={{ color: '#cc8400', fontWeight: 'bold' }}>
-                    Entrega Parcial
-                  </span>
-                ) : (
-                  <span style={{ color: '#b30000', fontWeight: 'bold' }}>
-                    Não entrege
-                  </span>
-                )}
-              </span>
+              </div>
             </div>
           </MaxCard.Body>
         </div>
@@ -141,41 +109,28 @@ export function CardCodFinal() {
             marginBottom: 5,
           }}
         >
-          <MaxCard.Header>
-            <h1>Observações do produto:</h1>
-          </MaxCard.Header>
           <MaxCard.Body>
+            <h3 style={{margin:20}}>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
                   key={item.codigo}
                   style={{
                     borderBottom: '1px solid #3333',
-                    marginBottom: 20,
-                    paddingBottom: 10,
                   }}
                 >
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Código da entrega: </span>
-                    <span style={{ color: 'gray' }}>{item.codigo_entrega}</span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Código Produto: </span>
-                    <span style={{ color: 'gray' }}>{item.codigo}</span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Descrição: </span>
-                    <span style={{ color: 'gray' }}>
-                      {item.descricao_produto}
+                  <div
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 20,
+                      color: 'gray',
+                    }}
+                  >
+                    <span>
+                      {item.quantidade} x {item.descricao_produto} (
+                      {item.codigo})
                     </span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Embalagem: </span>
-                    <span style={{ color: 'gray' }}>{item.embalagem}</span>
-                  </div>
-                  <div style={{ fontSize: 15, marginBottom: 20 }}>
-                    <span> Quantidade: </span>
-                    <span style={{ color: 'gray' }}>{item.quantidade}</span>
                   </div>
                 </div>
               ))
@@ -194,34 +149,37 @@ export function CardCodFinal() {
             marginBottom: 10,
           }}
         >
-          <MaxCard.Header>
-            <h1>Ocorrências:</h1>
-          </MaxCard.Header>
           <MaxCard.Body>
+            <h3 style={{margin:20}}>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
+
                 <div
                   key={index}
                   style={{
-                    borderRadius: 4,
-                    background: '#4CA78C',
-                    color: 'white',
-                    width: '100%',
-                    padding: 10,
-                    marginBottom: 10,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    borderBottom: '1px solid #3333',
                   }}
                 >
-                  <h3 style={{ fontSize: 14, color: 'white' }}>
-                    {oc.ocorrencia?.descricao_ocorrencia}
-                  </h3>
-                  <span style={{ fontSize: 12 }}>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      display: 'flex',
+                      margin: 20,
+                      color: 'gray',
+                       gap:73
+                    }}
+                  >
+                    <span>
+                      {oc.ocorrencia?.descricao_ocorrencia}
+                    </span>
+                  
+
+                  <span >
                     {oc.created_at
                       ? new Date(oc.created_at).toLocaleString()
                       : ''}
                   </span>
+                  </div>
                 </div>
               ))
             ) : (

@@ -12,43 +12,39 @@ export function ResultadoEntrega() {
   const [observacao, setObservacao] = useState('')
   const [imagem, setImagem] = useState<File[]>([])
   const [preview, setPreview] = useState<string[]>([])
-  const [hovered, setHovered] = useState<StatusResultadoEnum | null>(null)
-  const [status_resultado, setStatusResultado] = useState<
-    StatusResultadoEnum | undefined
-  >()
+  const [status_resultado, setStatusResultado] = useState<StatusResultadoEnum | undefined>(undefined)
 
-  const galeriaRef = useRef<HTMLInputElement>(null)
   const cameraRef = useRef<HTMLInputElement>(null)
 
+  const LIMITE_IMAGENS = 3
+
   const handleImagem = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (!files) return
+  const files = event.target.files
+  if (!files) return
 
-    const novosArquivos = Array.from(files)
+  const novosArquivos = Array.from(files)
 
-    // 🔥 verifica se vai ultrapassar o limite
-    if (imagem.length + novosArquivos.length > LIMITE_IMAGENS) {
-      notifyWarning({ message: 'O limite máximo de é de 3 fotos' })
-      return
-    }
-
-    const novasPreviews = novosArquivos.map((file) => URL.createObjectURL(file))
-
-    setImagem((prev) => [...prev, ...novosArquivos])
-    setPreview((prev) => [...prev, ...novasPreviews])
-
-    // limpa o input para permitir selecionar a mesma imagem de novo se quiser
-    event.target.value = ''
+  if (imagem.length + novosArquivos.length > LIMITE_IMAGENS) {
+    notifyWarning({ message: 'O limite máximo é de 3 fotos' })
+    return
   }
+
+  setImagem((prev) => [...prev, ...novosArquivos])
+
+  const novosPreviews = novosArquivos.map((file) =>
+    URL.createObjectURL(file)
+  )
+
+  setPreview((prev) => [...prev, ...novosPreviews])
+
+  event.target.value = ''
+}
 
   const removerImagem = (index: number) => {
     setImagem((prev) => prev.filter((_, i) => i !== index))
-
-    setPreview((prev) => {
-      URL.revokeObjectURL(prev[index])
-      return prev.filter((_, i) => i !== index)
-    })
+    setPreview((prev) => prev.filter((_, i) => i !== index))
   }
+
   async function onSubmit() {
     try {
       if (!status_resultado) {
@@ -92,29 +88,18 @@ export function ResultadoEntrega() {
     }
   }
 
-  const LIMITE_IMAGENS = 3
-
   return (
     <div className="max-container">
-      <form action="">
+      
         <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <div style={{ display: 'flex', gap: 200 }}>
-            <Button
-              //CORRIGIR
-              onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
-            >
+          <div style={{ display: 'flex', gap: 200, justifyContent: 'center' }}>
+            <Button onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}>
               <i className="fa-solid fa-arrow-left-long"></i>
             </Button>
 
-            <Button
-              onClick={() => cameraRef.current?.click()}
-              // style={{
-              //   width: 58,
-              //   height: 60,
-              // }}
-            >
+            <Button onClick={() => cameraRef.current?.click()}>
               <i className="fa-solid fa-camera"></i>
-              Adicionar imagem
+              Adicionar imagem 
             </Button>
           </div>
 
@@ -129,32 +114,35 @@ export function ResultadoEntrega() {
             onChange={handleImagem}
           />
 
-          {preview && (
+          {preview && preview.length > 0 && (
             <div
               style={{
                 marginTop: 20,
                 display: 'flex',
                 gap: 10,
                 flexWrap: 'wrap',
+                justifyContent: 'center',
               }}
             >
-              {preview.map((preview, index) => (
+              {preview.map((previewUrl, index) => (
                 <div
                   key={index}
                   style={{ position: 'relative', display: 'inline-block' }}
                 >
                   <img
-                    src={preview}
-                    alt="preview"
+                    src={previewUrl}
+                    alt={`preview ${index + 1}`}
                     style={{
                       width: 120,
                       height: 120,
                       objectFit: 'cover',
                       borderRadius: 8,
+                      border: '2px solid #ddd',
                     }}
                   />
 
                   <button
+                    type="button"
                     onClick={() => removerImagem(index)}
                     style={{
                       position: 'absolute',
@@ -164,9 +152,13 @@ export function ResultadoEntrega() {
                       color: 'white',
                       border: 'none',
                       borderRadius: '50%',
-                      width: 22,
-                      height: 22,
+                      width: 24,
+                      height: 24,
                       cursor: 'pointer',
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     ✕
@@ -176,7 +168,7 @@ export function ResultadoEntrega() {
             </div>
           )}
         </div>
-
+<form action="">
         <div style={{ flexDirection: 'column' }}>
           <h3
             style={{
@@ -197,7 +189,6 @@ export function ResultadoEntrega() {
               alignItems: 'center',
               justifyContent: 'center',
               display: 'flex',
-
               marginLeft: 27,
               width: '350px',
               minHeight: '100px',
@@ -262,7 +253,10 @@ export function ResultadoEntrega() {
                   marginBottom: '8px',
                 }}
               />
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
               <span
                 style={{ fontSize: '14px', color: 'green', fontWeight: '500' }}
               >

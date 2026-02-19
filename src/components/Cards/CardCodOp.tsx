@@ -9,11 +9,13 @@ import {
   StatusEntregaEnum,
 } from '@/@types'
 import api from '@/api/api'
+import { ModalPausar } from '../Modal/modalPausar'
 
 export function CardCodOp() {
   const { codigo_operacao } = useParams<{ codigo_operacao: string }>()
   const navigate = useNavigate()
 
+  const [IsPause, setIsPause] = useState(false)
   const [IsOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [entrega, setEntrega] = useState<IEntregas | null>(null)
@@ -292,7 +294,7 @@ export function CardCodOp() {
           }}
         >
           {entrega.status_entrega === StatusEntregaEnum.INICIADO ? (
-            <Button onClick={Pausar}>
+            <Button onClick={() => (setIsPause(true) ,Pausar)}>
               <i className="fa-solid fa-pause"></i> <span>Pausar</span>
             </Button>
           ) : (
@@ -312,6 +314,12 @@ export function CardCodOp() {
         <Modal
           isOpen={IsOpen}
           onClose={() => setIsOpen(false)}
+          codigoEntrega={entrega.codigo_operacao!}
+        />
+
+          <ModalPausar
+          isOpen={IsPause}
+          onClose={() => setIsPause(false)}
           codigoEntrega={entrega.codigo_operacao!}
         />
       </MaxCard.Container>

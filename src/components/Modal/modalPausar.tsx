@@ -1,4 +1,4 @@
-import { IOcorrencias } from '@/@types'
+import { IOcorrencias, TipoOcorrenciaEnum } from '@/@types'
 import api from '@/api/api'
 import { Button } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
@@ -13,7 +13,7 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
   const [ocorrencias, setOcorrencias] = useState<IOcorrencias[]>([])
   const [loading, setLoading] = useState(false)
   const [selecionada, setSelecionada] = useState('')
-  const [observacao, setObservacao] = useState("")
+  const [observacao, setObservacao] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -45,9 +45,16 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
     try {
       setLoading(true)
 
+      console.log({
+        codigo_entrega: Number(codigoEntrega),
+        codigo_ocorrencia: Number(selecionada),
+        descricao_ocorrencia: observacao,
+      })
+
       await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
         codigo_entrega: Number(codigoEntrega),
         codigo_ocorrencia: Number(selecionada),
+        descricao_ocorrencia: observacao,
       })
 
       onClose()
@@ -100,9 +107,7 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
             alignItems: 'center',
           }}
         >
-          <h2 style={{ fontSize: '1.2rem', margin: 0 }}>
-            Motivo da pausa:
-          </h2>
+          <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Motivo da pausa:</h2>
           <Button
             onClick={onClose}
             style={{ background: 'grey', width: 30, height: 30, padding: 0 }}
@@ -125,7 +130,7 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
               borderRadius: 6,
               border: '1px solid #ccc',
               backgroundColor: loading ? '#f0f0f0' : 'white',
-              color:'grey'
+              color: 'grey',
             }}
             value={selecionada}
             onChange={(e) => setSelecionada(e.target.value)}
@@ -136,52 +141,15 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
             </option>
             {ocorrencias
               .filter(
-                (item) => ![1, 2, 3].includes(Number(item.codigo_ocorrencia)),
+                (oc) => oc.tipo_ocorrencia === TipoOcorrenciaEnum.MOTIVO_PAUSA,
               )
-              .map((item) => (
-                <option
-                  key={item.codigo_ocorrencia}
-                  value={item.codigo_ocorrencia}
-                >
-                  {item.descricao_ocorrencia}
+              .map((oc) => (
+                <option key={oc.codigo_ocorrencia} value={oc.codigo_ocorrencia}>
+                  {oc.nome_ocorrencia}
                 </option>
               ))}
           </select>
 
-          <div
-            style={{
-              marginTop: 25,
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <h2
-              style={{
-                fontSize: '1.2rem',
-                margin: 0,
-              }}
-            >
-              Justifique
-            </h2>
-
-            <input
-              placeholder="Digite uma justificativa..."
-              onChange={(e) => setObservacao(e.target.value)}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                minHeight: '40px',
-                borderRadius: '6px',
-                border: '1px solid #ccc',
-                backgroundColor: loading ? '#f0f0f0' : 'white',
-                outline: 'none',
-                marginTop: 10,
-              }}
-            />
-            
-          </div>
           <div
             style={{
               display: 'flex',
@@ -189,7 +157,7 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
               marginTop: 30,
             }}
           >
-            <Button disabled={loading || !selecionada}>
+            <Button type="submit" disabled={loading || !selecionada}>
               <span>{loading ? 'Aguarde...' : 'Confirmar'}</span>
             </Button>
           </div>

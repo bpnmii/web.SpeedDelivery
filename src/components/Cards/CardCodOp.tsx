@@ -86,7 +86,6 @@ export function CardCodOp() {
         codigo_entrega: Number(codigo_operacao),
         codigo_ocorrencia: Number(2),
       })
-      window.location.reload()
     } catch (err: any) {
       console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
     }
@@ -151,7 +150,7 @@ export function CardCodOp() {
                 <Button onClick={() => navigate('/')}>
                   <i className="fa-solid fa-arrow-left-long"></i>
                 </Button>
-                <Button onClick={tratarAbrirRota} style={{ marginLeft:170}}>
+                <Button onClick={tratarAbrirRota} style={{ marginLeft: 170 }}>
                   <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
                   <span style={{ fontSize: 15 }}>Localizar</span>
                 </Button>
@@ -169,7 +168,9 @@ export function CardCodOp() {
             >
               <i className="fa-solid fa-user"></i>
               <div>
-                <h3 style={{ display: 'flex', margin: 5  }}>{entrega.nome_cliente}</h3>
+                <h3 style={{ display: 'flex', margin: 5 }}>
+                  {entrega.nome_cliente}
+                </h3>
                 <span
                   style={{
                     fontSize: 13,
@@ -195,7 +196,7 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{margin:20}}>Itens do pedido de entrega:</h3>
+            <h3 style={{ margin: 20 }}>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
@@ -235,7 +236,7 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{margin:20}}>Ocorrências:</h3>
+            <h3 style={{ margin: 20 }}>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
                 <div
@@ -244,25 +245,22 @@ export function CardCodOp() {
                     borderBottom: '1px solid #3333',
                   }}
                 >
-                   <div
+                  <div
                     style={{
                       fontSize: 13,
                       display: 'flex',
                       margin: 20,
                       color: 'gray',
-                       gap:165
+                      gap: 165,
                     }}
                   >
-                    <span>
-                      {oc.ocorrencia?.descricao_ocorrencia}
-                    </span>
-                  
+                    <span>{oc.ocorrencia?.nome_ocorrencia}</span>
 
-                  <span >
-                    {oc.created_at
-                      ? new Date(oc.created_at).toLocaleString()
-                      : ''}
-                  </span>
+                    <span>
+                      {oc.created_at
+                        ? new Date(oc.created_at).toLocaleString()
+                        : ''}
+                    </span>
                   </div>
                 </div>
               ))
@@ -278,9 +276,11 @@ export function CardCodOp() {
                 display: 'flex',
               }}
             >
-              <Button onClick={() => setIsOpen(true)}>
-                Adicionar Ocorrência
-              </Button>
+              {entrega.status_entrega !== StatusEntregaEnum.PAUSADO ? (
+                <Button onClick={() => setIsOpen(true)}>
+                  Adicionar Ocorrência
+                </Button>
+              ) : null}
             </div>
           </MaxCard.Footer>
         </div>
@@ -294,7 +294,7 @@ export function CardCodOp() {
           }}
         >
           {entrega.status_entrega === StatusEntregaEnum.INICIADO ? (
-            <Button onClick={() => (setIsPause(true) ,Pausar)}>
+            <Button onClick={() => (Pausar(), setIsPause(true))}>
               <i className="fa-solid fa-pause"></i> <span>Pausar</span>
             </Button>
           ) : (
@@ -302,13 +302,15 @@ export function CardCodOp() {
               <i className="fa-solid fa-play"></i> <span>Retomar</span>
             </Button>
           )}
-          <Button
-            onClick={() =>
-              navigate(`/ResultadoEntrega/${entrega.codigo_operacao}`)
-            }
-          >
-            <i className="fa-solid fa-angles-right"></i> Concluir
-          </Button>
+          {entrega.status_entrega !== StatusEntregaEnum.PAUSADO ? (
+            <Button
+              onClick={() =>
+                navigate(`/ResultadoEntrega/${entrega.codigo_operacao}`)
+              }
+            >
+              <i className="fa-solid fa-angles-right"></i> Concluir
+            </Button>
+          ) : null}
         </div>
 
         <Modal
@@ -317,7 +319,7 @@ export function CardCodOp() {
           codigoEntrega={entrega.codigo_operacao!}
         />
 
-          <ModalPausar
+        <ModalPausar
           isOpen={IsPause}
           onClose={() => setIsPause(false)}
           codigoEntrega={entrega.codigo_operacao!}

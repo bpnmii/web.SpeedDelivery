@@ -1,4 +1,4 @@
-import { IOcorrencias } from '@/@types'
+import { IOcorrencias, TipoOcorrenciaEnum } from '@/@types'
 import api from '@/api/api'
 import { Button } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
@@ -133,14 +133,12 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
             </option>
             {ocorrencias
               .filter(
-                (item) => ![1, 2, 3].includes(Number(item.codigo_ocorrencia)),
+                (oc) =>
+                  oc.tipo_ocorrencia === TipoOcorrenciaEnum.MOTIVO_OCORRENCIA,
               )
-              .map((item) => (
-                <option
-                  key={item.codigo_ocorrencia}
-                  value={item.codigo_ocorrencia}
-                >
-                  {item.descricao_ocorrencia}
+              .map((oc) => (
+                <option key={oc.codigo_ocorrencia} value={oc.codigo_ocorrencia}>
+                  {oc.nome_ocorrencia}
                 </option>
               ))}
           </select>

@@ -36,6 +36,12 @@ export enum StatusResultadoEnum {
   NAO_ENTREGUE = 'NAO_ENTREGUE',
 }
 
+export enum TipoOcorrenciaEnum {
+  STATUS_ENTREGA = 'STATUS_ENTREGA',
+  MOTIVO_OCORRENCIA = 'MOTIVO_OCORRENCIA',
+  MOTIVO_PAUSA = 'MOTIVO_PAUSA',
+}
+
 export interface IEntregas {
   sequencia_entrega: number
   codigo_operacao?: number
@@ -62,12 +68,14 @@ export interface IItensPedido {
 
 export interface IOcorrencias {
   codigo_ocorrencia: number
+  nome_ocorrencia: string
   descricao_ocorrencia: string
+  tipo_ocorrencia: TipoOcorrenciaEnum
 }
-
 export interface ICriarOcorrenciasEntrega {
   codigo_ocorrencia?: number
   codigo_entrega?: number
+  descricao_ocorrencia?: string
 }
 
 export interface IOcorrenciasEntrega {

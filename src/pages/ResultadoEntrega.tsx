@@ -67,11 +67,12 @@ export function ResultadoEntrega() {
       if (
         (status_resultado === StatusResultadoEnum.NAO_ENTREGUE ||
           status_resultado === StatusResultadoEnum.ENTREGA_PARCIAL) &&
-        imagem.length === 0
+        imagem.length === 0 &&
+        !observacao.trim()
       ) {
         notifyError({
           message:
-            'É obrigatório adicionar ao menos uma imagem para este tipo de resultado.',
+            'Adicione ao menos uma imagem ou uma observação para este tipo de resultado.',
         })
         return
       }
@@ -96,86 +97,85 @@ export function ResultadoEntrega() {
 
   return (
     <div className="max-container">
-      
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <div style={{ display: 'flex', gap: 200 }}>
-            <Button
-              //CORRIGIR
-              onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
-            >
-              <i className="fa-solid fa-arrow-left-long"></i>
-            </Button>
+      <div style={{ textAlign: 'center', marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 200 }}>
+          <Button
+            //CORRIGIR
+            onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
+          >
+            <i className="fa-solid fa-arrow-left-long"></i>
+          </Button>
 
-            <Button
-              onClick={() => cameraRef.current?.click()}
-              // style={{
-              //   width: 58,
-              //   height: 60,
-              // }}
-            >
-              <i className="fa-solid fa-camera"></i>
-              Adicionar imagem
-            </Button>
-          </div>
-
-          {/* Câmera */}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            capture="environment"
-            ref={cameraRef}
-            style={{ display: 'none' }}
-            onChange={handleImagem}
-          />
-
-          {preview && (
-            <div
-              style={{
-                marginTop: 20,
-                display: 'flex',
-                gap: 10,
-                flexWrap: 'wrap',
-              }}
-            >
-              {preview.map((preview, index) => (
-                <div
-                  key={index}
-                  style={{ position: 'relative', display: 'inline-block' }}
-                >
-                  <img
-                    src={preview}
-                    alt="preview"
-                    style={{
-                      width: 120,
-                      height: 120,
-                      objectFit: 'cover',
-                      borderRadius: 8,
-                    }}
-                  />
-
-                  <button
-                    onClick={() => removerImagem(index)}
-                    style={{
-                      position: 'absolute',
-                      top: -8,
-                      right: -8,
-                      background: 'red',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: 22,
-                      height: 22,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <Button
+            onClick={() => cameraRef.current?.click()}
+            // style={{
+            //   width: 58,
+            //   height: 60,
+            // }}
+          >
+            <i className="fa-solid fa-camera"></i>
+            Adicionar imagem
+          </Button>
         </div>
+
+        {/* Câmera */}
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+          ref={cameraRef}
+          style={{ display: 'none' }}
+          onChange={handleImagem}
+        />
+
+        {preview && (
+          <div
+            style={{
+              marginTop: 20,
+              display: 'flex',
+              gap: 10,
+              flexWrap: 'wrap',
+            }}
+          >
+            {preview.map((preview, index) => (
+              <div
+                key={index}
+                style={{ position: 'relative', display: 'inline-block' }}
+              >
+                <img
+                  src={preview}
+                  alt="preview"
+                  style={{
+                    width: 120,
+                    height: 120,
+                    objectFit: 'cover',
+                    borderRadius: 8,
+                  }}
+                />
+
+                <button
+                  onClick={() => removerImagem(index)}
+                  style={{
+                    position: 'absolute',
+                    top: -8,
+                    right: -8,
+                    background: 'red',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: 22,
+                    height: 22,
+                    cursor: 'pointer',
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <form action="">
         <div style={{ flexDirection: 'column' }}>
           <h3

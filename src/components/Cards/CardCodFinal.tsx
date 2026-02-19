@@ -284,7 +284,7 @@ export function CardCodFinal() {
                 {entrega.imagem.map((img, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:3333/uploads/${img}`}
+                    src={`${window.location.protocol}//${window.location.hostname}:3333/uploads/${img}`}
                     alt={`imagem-${index}`}
                     style={{
                       width: 150,

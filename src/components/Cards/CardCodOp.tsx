@@ -147,7 +147,7 @@ export function CardCodOp() {
           <MaxCard.Header>
             <div style={{ display: 'flex' }} className="d-flex gap-20">
               <div style={{ display: 'flex', gap: 20 }} className="initial">
-                <Button onClick={() => navigate('/')}>
+                <Button onClick={() => navigate('/home')}>
                   <i className="fa-solid fa-arrow-left-long"></i>
                 </Button>
                 <Button onClick={tratarAbrirRota} style={{ marginLeft: 170 }}>

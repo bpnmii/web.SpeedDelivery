@@ -87,7 +87,7 @@ export function ResultadoEntrega() {
         codigo_ocorrencia: Number(4),
       })
 
-      navigate('/')
+      navigate('/home')
     } catch (err: any) {
       notifyErrorCatch(err)
     }

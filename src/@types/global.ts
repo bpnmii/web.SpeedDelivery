@@ -84,3 +84,20 @@ export interface IOcorrenciasEntrega {
   entrega?: IEntregas
   ocorrencia?: IOcorrencias
 }
+
+export interface IDados {
+  token: string
+  entregador: IEntregador
+}
+
+export interface ILogin {
+  email: string
+  senha: string
+}
+
+export interface IEntregador {
+  codigo_entregador?: number
+  unidade_negocio: string
+  email: string
+  senha: string
+}

@@ -4,9 +4,11 @@ import { Avatar, Header as MaxHeader } from 'maxscalla-lib'
 import { IconHeader, TextHeader } from './styles'
 import { CardUser } from './components/CardUser'
 import { clickOutside } from '../../../utils/click-outside'
+import { useAuth } from '@/utils/useAuth'
 
 const Header = (): ReactElement => {
   const [showCardUser, setShowCardUser] = useState<boolean>(false)
+  const login = useAuth((state) => state.usuario)
 
   const onChangeCardUser = (x: boolean) => {
     setShowCardUser(x)
@@ -41,7 +43,7 @@ const Header = (): ReactElement => {
           <Avatar
             bgColor="blue"
             size="md"
-            letter="A"
+            letter={String(login?.email).substring(0, 1)}
             // letter={String(empresa?.usuario.usuario).substring(0, 1)}
           />
         </IconHeader>

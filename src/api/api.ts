@@ -2,11 +2,40 @@ import type { AxiosPromise } from 'axios'
 import xhr from './xhr'
 import {
   ICriarOcorrenciasEntrega,
+  IDados,
+  IEntregador,
   IEntregas,
   IItensPedido,
+  ILogin,
   IOcorrencias,
   IOcorrenciasEntrega,
 } from '@/@types/global'
+
+const entregadores = {
+  criarEntregadores: (data: IDados): AxiosPromise<IEntregador> => {
+    return xhr.post('/entregadores', data)
+  },
+
+  listarEntregadores: (): AxiosPromise<{ Entregadores: IEntregador[] }> =>
+    xhr.get('/entregadores'),
+
+  atualizarEntregador: (
+    codigo_entregador: number,
+    data: Partial<IEntregador>,
+  ): AxiosPromise<IEntregador> => {
+    return xhr.patch(`/entregadores/${codigo_entregador}`, data)
+  },
+
+  deletarEntregador: (codigo_entregador: number): AxiosPromise<void> => {
+    return xhr.delete(`/entregadores/${codigo_entregador}`)
+  },
+
+  loginEntregador: (
+    data: ILogin,
+  ): AxiosPromise<{ token: string; entregador: IEntregador }> => {
+    return xhr.post(`/entregadores/login`, data)
+  },
+}
 
 const entregas = {
   criarEntrega: (data: IEntregas): AxiosPromise<IEntregas> => {
@@ -95,6 +124,7 @@ const ocorrenciasEntrega = {
 }
 
 const api = {
+  entregadores,
   entregas,
   itensPedido,
   ocorrencias,

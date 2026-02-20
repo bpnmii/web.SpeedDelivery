@@ -13,7 +13,6 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
   const [ocorrencias, setOcorrencias] = useState<IOcorrencias[]>([])
   const [loading, setLoading] = useState(false)
   const [selecionada, setSelecionada] = useState('')
-  const [observacao, setObservacao] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -48,13 +47,11 @@ export function ModalPausar({ isOpen, onClose, codigoEntrega }: ModalProps) {
       console.log({
         codigo_entrega: Number(codigoEntrega),
         codigo_ocorrencia: Number(selecionada),
-        descricao_ocorrencia: observacao,
       })
 
       await api.ocorrenciasEntrega.criarOcorrenciaEntrega({
         codigo_entrega: Number(codigoEntrega),
         codigo_ocorrencia: Number(selecionada),
-        descricao_ocorrencia: observacao,
       })
 
       onClose()

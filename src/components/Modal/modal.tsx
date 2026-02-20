@@ -119,17 +119,19 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
           <select
             style={{
               width: '100%',
+              height: '40px',
               padding: '8px',
               borderRadius: 6,
               border: '1px solid #ccc',
               backgroundColor: loading ? '#f0f0f0' : 'white',
+              color: 'grey',
             }}
             value={selecionada}
             onChange={(e) => setSelecionada(e.target.value)}
             disabled={loading}
           >
             <option value="">
-              {loading ? 'Carregando...' : 'Selecione uma ocorrência'}
+              {loading ? 'Carregando...' : 'Selecione o motivo...'}
             </option>
             {ocorrencias
               .filter(
@@ -150,7 +152,7 @@ export function Modal({ isOpen, onClose, codigoEntrega }: ModalProps) {
               marginTop: 30,
             }}
           >
-            <Button disabled={loading || !selecionada}>
+            <Button type="submit" disabled={loading || !selecionada}>
               <span>{loading ? 'Aguarde...' : 'Confirmar'}</span>
             </Button>
           </div>

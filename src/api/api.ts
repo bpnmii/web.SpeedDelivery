@@ -2,7 +2,6 @@ import type { AxiosPromise } from 'axios'
 import xhr from './xhr'
 import {
   ICriarOcorrenciasEntrega,
-  IDados,
   IEntregador,
   IEntregas,
   IItensPedido,
@@ -12,7 +11,7 @@ import {
 } from '@/@types/global'
 
 const entregadores = {
-  criarEntregadores: (data: IDados): AxiosPromise<IEntregador> => {
+  criarEntregadores: (data: IEntregador): AxiosPromise<IEntregador> => {
     return xhr.post('/entregadores', data)
   },
 

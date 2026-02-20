@@ -70,7 +70,7 @@ export function ResultadoEntrega() {
         imagem.length === 0 &&
         !observacao.trim()
       ) {
-        notifyError({
+        notifyErrorCatch({
           message:
             'Adicione ao menos uma imagem ou uma observação para este tipo de resultado.',
         })

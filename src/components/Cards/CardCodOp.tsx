@@ -48,20 +48,13 @@ export function CardCodOp() {
       (position) => {
         const { latitude, longitude, accuracy } = position.coords
 
-        console.log('📡 Localização atual:', latitude, longitude)
-        console.log('🎯 Precisão (metros):', accuracy)
-
         const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${encodeURIComponent(
           enderecoDestino,
         )}&travelmode=driving`
 
-        console.log('🗺️ URL gerada:', url)
-
         window.open(url, '_blank')
       },
       (error) => {
-        console.log('❌ Erro ao obter GPS:', error)
-
         // fallback: abre só destino
         const urlFallback = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
           enderecoDestino,

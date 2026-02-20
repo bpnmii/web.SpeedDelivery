@@ -15,7 +15,7 @@ export const Home = () => {
 
   return (
     <>
-      <SubHeader title="Entregas pendentes" />
+      <SubHeader title="Entregas pendentes" isDateDisabled />
 
       <div className="max-container">
         <div style={{ marginBottom: 20 }}>

@@ -207,7 +207,7 @@ export function CardCodFinal() {
                       gap: 73,
                     }}
                   >
-                    <span>{oc.ocorrencia?.descricao_ocorrencia}</span>
+                    <span>{oc.ocorrencia?.nome_ocorrencia}</span>
 
                     <span>
                       {oc.created_at

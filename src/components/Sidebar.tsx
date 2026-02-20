@@ -21,7 +21,7 @@ export const SideBar = () => {
       isActive: handleActive('home'),
       name: 'Entregas pendentes',
       title: 'home',
-      pathTo: '/',
+      pathTo: '/home',
     },
     {
       icon: 'fa-duotone fa-solid fa-check',

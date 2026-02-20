@@ -1,5 +1,6 @@
 import { IEntregas, StatusEntregaEnum } from '@/@types'
 import api from '@/api/api'
+import { useAuth } from '@/utils/useAuth'
 import { Button, MaxCard } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +13,7 @@ export function Card({ filterValue }: CardProps) {
   const navigate = useNavigate()
   const [entregas, setEntregas] = useState<IEntregas[]>([])
   const [loading, setLoading] = useState(true)
+  const { usuario } = useAuth()
 
   async function Iniciar(codigo_operacao: number | any) {
     try {
@@ -46,20 +48,33 @@ export function Card({ filterValue }: CardProps) {
   }
 
   useEffect(() => {
-    api.entregas
-      .listarEntregas()
-      .then((response) => {
-        const dados = response.data?.Entregas || response.data || []
-        setEntregas(dados)
-      })
-      .catch((err) => {
-        console.error('Erro ao carregar:', err)
+    async function carregarEntregas() {
+      try {
+        const codigo = usuario?.codigo_entregador
+
+        console.log('CODIGO ENTREGADOR:', usuario?.codigo_entregador)
+
+        if (!codigo) {
+          setEntregas([])
+          setLoading(false)
+          return
+        }
+
+        const response = await api.entregas.mostrarEntregasEntregador(
+          Number(codigo),
+        )
+
+        setEntregas(response.data || [])
+      } catch (err) {
+        console.error('Erro ao carregar entregas:', err)
         setEntregas([])
-      })
-      .finally(() => {
+      } finally {
         setLoading(false)
-      })
-  }, [])
+      }
+    }
+
+    carregarEntregas()
+  }, [usuario])
 
   // Função de filtragem por texto em múltiplos campos
   const filterEntregas = (data: IEntregas[]) => {
@@ -153,14 +168,13 @@ export function Card({ filterValue }: CardProps) {
                       fontSize: 20,
                       background: '#508DDF',
                       borderRadius: 6,
-                      padding: "2px 13px",
+                      padding: '2px 13px',
                       alignItems: 'center',
                       display: 'flex',
                       textAlign: 'center',
                       justifyContent: 'center',
                       color: 'white',
                       marginBottom: 50,
-                      
                     }}
                   >
                     {index + 1}

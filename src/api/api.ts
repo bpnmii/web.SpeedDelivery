@@ -48,6 +48,11 @@ const entregas = {
   mostrarEntregas: (codigo_operacao: number): AxiosPromise<IEntregas> =>
     xhr.get(`/entregas/${codigo_operacao}`),
 
+  mostrarEntregasEntregador: (
+    codigo_entregador: number,
+  ): AxiosPromise<IEntregas[]> =>
+    xhr.get(`/entregas/entregador/${codigo_entregador}`),
+
   atualizarEntregas: (
     codigo_operacao: number,
     data: any,

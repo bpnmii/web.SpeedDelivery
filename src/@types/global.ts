@@ -45,6 +45,7 @@ export enum TipoOcorrenciaEnum {
 export interface IEntregas {
   sequencia_entrega: number
   codigo_operacao?: number
+  codigo_entregador?: number
   codigo_cliente: number
   nome_cliente: string
   CEP: string

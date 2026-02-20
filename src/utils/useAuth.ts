@@ -36,6 +36,7 @@ export const useAuth = create(
             })
           } catch (error) {
             notifyErrorCatch(error, 'Erro ao efetuar o login!')
+            throw error // ← ESSENCIAL
           }
         },
 

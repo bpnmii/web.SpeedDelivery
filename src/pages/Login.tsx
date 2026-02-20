@@ -16,6 +16,7 @@ import { IDados, Screens } from '@/components/Screens'
 import { useNavigate } from 'react-router-dom'
 import api from '@/api/api'
 import { useAuth } from '@/utils/useAuth'
+import SpeedDeliveryLogo from "../../public/SpeedDeliveryLogo.png"
 
 interface Props {
   changeScreen: (value: Screens) => void
@@ -66,22 +67,18 @@ export const Login = ({
 
   return (
     <div className="d-flex flex-center flex-column flex-lg-row-fluid">
-      <div className="w-form">
-        <div className="brand-logo pd-b-30 mg-b-25">
-          <div className="logo-link w-100 text-center">
-            <img
-              className="logo-dark w-100"
-              src="./images/logo-cs-preto.png"
-              alt="logo"
-            />
+      <div className="w-form" style={{width:'90%', height:"80vh"}}>
+        <div className="brand-logo pd-b-10 mg-b-15">
+          <div className="text-center">
+           <img style={{width:180, height:70}} src={SpeedDeliveryLogo} alt="" />
           </div>
         </div>
         <div className="text-center mb-11">
           <h5
-            style={{ fontSize: 36, fontWeight: 400 }}
-            className="montserrat-regular mb-3 cs-color-dark"
+            style={{ fontSize: 20, fontWeight: 500 }}
+            className="mb-3 cs-color-dark"
           >
-            Login
+           Acesse sua conta
           </h5>
         </div>
         <Form ref={formRef} onSubmit={handleLogin}>

@@ -12,6 +12,7 @@ import {
 } from '@/utils'
 import axios from 'axios'
 import { IDados, Screens } from '@/components/Screens'
+import SpeedDeliveryLogo from '../../public/SpeedDeliveryLogo.png'
 
 interface Props {
   changeScreen: (value: Screens) => void
@@ -124,15 +125,15 @@ export const Register = ({ changeScreen }: Props): ReactElement => {
   }
 
   return (
-    <div className="d-flex flex-column flex-lg-row flex-column-fluid h-100-vh">
-      <div className="d-flex flex-center flex-column flex-lg-row-fluid">
-        <div className="w-form">
-          <div className="brand-logo pd-b-30 mg-b-25">
-            <div className="logo-link w-100 text-center">
+    <div className="">
+      <div className="d-flex flex-center flex-column flex-lg-row-fluid flex-lg-row flex-column-fluid">
+        <div className="w-form" style={{ width: '90%', height: '80vh' }}>
+          <div className="brand-logo pd-b-10 mg-b-15">
+            <div className="text-center">
               <img
-                className="logo-dark w-100"
-                src="./images/logo-cs-preto.png"
-                alt="logo"
+                style={{ width: 180, height: 70 }}
+                src={SpeedDeliveryLogo}
+                alt=""
               />
             </div>
           </div>
@@ -140,12 +141,20 @@ export const Register = ({ changeScreen }: Props): ReactElement => {
           {!showCode ? (
             <>
               <div className="text-center mb-11">
-                <h5 style={{ fontSize: 36 }}>Criar conta</h5>
+                <h5
+                  style={{ fontSize: 20, fontWeight: 500 }}
+                  className="mb-3 cs-color-dark"
+                >
+                  Criar conta
+                </h5>
               </div>
 
               <Form ref={formRef} onSubmit={handleRegister}>
                 <div className="form-group mg-b-20">
-                  <span className="form-label" style={{ color: '#8094AE' }}>
+                  <span
+                    className="form-label overline-title fs-12 weight-bold"
+                    style={{ color: '#8094AE' }}
+                  >
                     Unidade de negocio
                   </span>
                   <Input
@@ -157,7 +166,10 @@ export const Register = ({ changeScreen }: Props): ReactElement => {
                 </div>
 
                 <div className="form-group mg-b-20">
-                  <span className="form-label" style={{ color: '#8094AE' }}>
+                  <span
+                    className="form-label overline-title fs-12 weight-bold"
+                    style={{ color: '#8094AE' }}
+                  >
                     Email
                   </span>
                   <Input
@@ -170,7 +182,10 @@ export const Register = ({ changeScreen }: Props): ReactElement => {
                 </div>
 
                 <div className="form-group mg-b-20">
-                  <span className="form-label" style={{ color: '#8094AE' }}>
+                  <span
+                    className="form-label overline-title fs-12 weight-bold"
+                    style={{ color: '#8094AE' }}
+                  >
                     Senha
                   </span>
                   <Input
@@ -181,7 +196,7 @@ export const Register = ({ changeScreen }: Props): ReactElement => {
                     focusColor="blue"
                     style={{ width: '100%' }}
                     icon={
-                      <span
+                      <span className="d-flex align-items-center cursor-pointer"
                         onClick={() => setVerSenha(!verSenha)}
                         style={{ color: '#8094AE', cursor: 'pointer' }}
                       >
@@ -195,9 +210,11 @@ export const Register = ({ changeScreen }: Props): ReactElement => {
                   />
                 </div>
 
-                <Button type="submit" loading={isLoading} className="w-100">
+              <div className="d-flex form-group w-100">
+                <Button type="submit" loading={isLoading} className="w-100 ">
                   Criar conta
                 </Button>
+              </div>
 
                 <div className="text-center mt-4">
                   <span

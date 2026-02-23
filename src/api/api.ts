@@ -49,8 +49,9 @@ const entregas = {
 
   mostrarEntregasEntregador: (
     codigo_entregador: number,
+    page: number,
   ): AxiosPromise<IEntregas[]> =>
-    xhr.get(`/entregas/entregador/${codigo_entregador}`),
+    xhr.get(`/entregas/entregador/${codigo_entregador}?page=${page}`),
 
   atualizarEntregas: (
     codigo_operacao: number,

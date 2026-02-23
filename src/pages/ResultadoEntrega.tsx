@@ -1,9 +1,15 @@
-import { StatusEntregaEnum, StatusResultadoEnum } from '@/@types/global'
+import {
+  IEntregas,
+  IItensPedido,
+  IOcorrenciasEntrega,
+  StatusEntregaEnum,
+  StatusResultadoEnum,
+} from '@/@types/global'
 import api from '@/api/api'
 import { Button, MaxCard } from 'maxscalla-lib'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { notifyErrorCatch, notifyWarning } from '@/utils'
+import { notifyError, notifyErrorCatch, notifyWarning } from '@/utils'
 
 export function ResultadoEntrega() {
   const navigate = useNavigate()
@@ -16,6 +22,40 @@ export function ResultadoEntrega() {
 
   const cameraRef = useRef<HTMLInputElement>(null)
   const LIMITE_IMAGENS = 3
+
+  const [IsPause, setIsPause] = useState(false)
+  const [IsOpen, setIsOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [ocorrenciaEntrega, setOcorrenciaEntrega] = useState<IEntregas | null>(
+    null,
+  )
+  const [itensPedido, setItensPedido] = useState<IItensPedido[]>([])
+  const [ocorrencias, setOcorrencias] = useState<IOcorrenciasEntrega[]>([])
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!codigo_operacao) return
+      try {
+        setLoading(true)
+        const codigo = Number(codigo_operacao)
+        const { data: entregaData } = await api.entregas.mostrarEntregas(codigo)
+        setOcorrenciaEntrega(entregaData)
+        const response = await api.ocorrenciasEntrega.mostrarOcorrenciaEntrega(
+          codigo,
+        )
+        setOcorrencias(response.data)
+        const { data: itensData } = await api.itensPedido.mostrarItensPedido(
+          codigo,
+        )
+        setItensPedido(itensData)
+      } catch (err: any) {
+        console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [codigo_operacao])
 
   const handleImagem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -52,15 +92,21 @@ export function ResultadoEntrega() {
         return
       }
 
+      const possuiMotivoOcorrencia = ocorrencias.some(
+        (oc) => oc.ocorrencia?.tipo_ocorrencia === 'MOTIVO_OCORRENCIA',
+        // ou: oc.codigo_ocorrencia === X (caso seja numérico)
+      )
+
       if (
+        !possuiMotivoOcorrencia &&
         (status_resultado === StatusResultadoEnum.NAO_ENTREGUE ||
           status_resultado === StatusResultadoEnum.ENTREGA_PARCIAL) &&
         imagem.length === 0 &&
         !observacao.trim()
       ) {
-        notifyErrorCatch({
+        notifyError({
           message:
-            'Adicione ao menos uma imagem ou uma observação para este tipo de resultado.',
+            'Adicione ao menos uma imagem, observação ou uma ocorrência para este tipo de resultado.',
         })
         return
       }
@@ -83,7 +129,7 @@ export function ResultadoEntrega() {
         codigo_ocorrencia: 4,
       })
 
-      navigate('/home')
+      navigate('/Finalizadas')
     } catch (err: any) {
       notifyErrorCatch(err)
     }
@@ -93,7 +139,7 @@ export function ResultadoEntrega() {
     <div className="max-container">
       {/* CARD 1 - VOLTAR */}
       <MaxCard.Container style={{ marginBottom: 20 }}>
-        <MaxCard.Body style={{alignItems: 'center'}}>
+        <MaxCard.Body style={{ alignItems: 'center' }}>
           <Button
             type="button"
             onClick={() => navigate(`/DetalheEntrega/${codigo_operacao}`)}
@@ -102,7 +148,7 @@ export function ResultadoEntrega() {
           </Button>
           <h3 style={{ textAlign: 'center', marginBottom: 20 }}>
             Status da entrega
-          </h3> 
+          </h3>
           <div
             style={{
               display: 'flex',
@@ -188,7 +234,7 @@ export function ResultadoEntrega() {
 
       {/* CARD 3 - IMAGEM */}
       <MaxCard.Container style={{ marginBottom: 20 }}>
-        <MaxCard.Body style={{ textAlign: 'center', justifyItems:'center' }}>
+        <MaxCard.Body style={{ textAlign: 'center', justifyItems: 'center' }}>
           <Button type="button" onClick={() => cameraRef.current?.click()}>
             <i className="fa-solid fa-camera"></i> Adicionar imagem
           </Button>
@@ -277,7 +323,7 @@ export function ResultadoEntrega() {
         <MaxCard.Footer>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
-              type="button"
+              type="submit"
               onClick={onSubmit}
               style={{ width: 300, height: 55 }}
             >

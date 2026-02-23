@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 import { env } from '../env'
 
-const url = 'http://192.168.1.151:3333'
+const url = 'http://192.168.1.62:3333'
 //env.VITE_ENV === 'dev' ? 'http://localhost:3333' :
 
 const headers = (tokenAuth: string): AxiosRequestHeaders => ({

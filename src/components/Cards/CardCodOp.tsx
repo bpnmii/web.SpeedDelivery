@@ -24,12 +24,7 @@ export function CardCodOp() {
 
   // --- FUNÇÃO DE LOCALIZAÇÃO COM ALTA PRECISÃO ---
   async function tratarAbrirRota() {
-    if (!entrega) {
-      console.log('❌ Entrega não encontrada')
-      return
-    }
-
-    console.log('🚀 Iniciando rota com Google Maps')
+    if (!entrega) return
 
     const enderecoDestino = `
     ${entrega.endereco},
@@ -42,34 +37,21 @@ export function CardCodOp() {
       .replace(/\s+/g, ' ')
       .trim()
 
-    console.log('📍 Destino:', enderecoDestino)
+    const enderecoEncoded = encodeURIComponent(enderecoDestino)
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude, accuracy } = position.coords
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
 
-        const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${encodeURIComponent(
-          enderecoDestino,
-        )}&travelmode=driving`
-
-        window.open(url, '_blank')
-      },
-      (error) => {
-        // fallback: abre só destino
-        const urlFallback = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-          enderecoDestino,
-        )}`
-
-        window.open(urlFallback, '_blank')
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0,
-      },
-    )
+    if (isMobile) {
+      // Abre app padrão de mapas
+      window.location.href = `geo:0,0?q=${enderecoEncoded}`
+    } else {
+      // Desktop → abre Google Maps no navegador
+      window.open(
+        `https://www.google.com/maps/search/?api=1&query=${enderecoEncoded}`,
+        '_blank',
+      )
+    }
   }
-
   async function Pausar() {
     try {
       const codigo = Number(codigo_operacao)

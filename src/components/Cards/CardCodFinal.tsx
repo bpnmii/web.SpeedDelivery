@@ -49,6 +49,160 @@ export function CardCodFinal() {
   if (loading) return <p>Carregando detalhes...</p>
   if (!entrega) return <p>Entrega não encontrada.</p>
 
+  let conteudoObservacao
+
+  const possuiMotivoOcorrencia = ocorrencias.some(
+    (oc) => oc.ocorrencia?.tipo_ocorrencia === 'MOTIVO_OCORRENCIA',
+  )
+
+  const temObservacao =
+    !!entrega.observacao && entrega.observacao.trim().length > 0
+
+  const temImagem = !!entrega.imagem?.length
+
+  if (temObservacao) {
+    conteudoObservacao = (
+      <span
+        style={{
+          fontSize: 13,
+          display: 'flex',
+          margin: 20,
+          color: 'gray',
+        }}
+      >
+        {entrega.observacao}
+      </span>
+    )
+  } else if (temImagem) {
+    conteudoObservacao = (
+      <span
+        style={{
+          fontSize: 13,
+          display: 'flex',
+          margin: 20,
+          color: 'gray',
+        }}
+      >
+        Justificado por imagem.
+      </span>
+    )
+  } else if (possuiMotivoOcorrencia) {
+    conteudoObservacao = (
+      <span
+        style={{
+          fontSize: 13,
+          display: 'flex',
+          margin: 20,
+          color: 'gray',
+        }}
+      >
+        Justificado por ocorrência, sem observação textual.
+      </span>
+    )
+  } else {
+    conteudoObservacao = (
+      <span
+        style={{
+          fontSize: 13,
+          display: 'flex',
+          margin: 20,
+          color: 'gray',
+        }}
+      >
+        Nenhuma observação registrada.
+      </span>
+    )
+  }
+
+  const tempoTotal = calcularTempoOcorrencia(
+    ocorrencias,
+    'Iniciado',
+    'Concluído',
+  )
+
+  function calcularTempoOcorrencia(
+    ocorrencias: IOcorrenciasEntrega[],
+    nomeInicio: string,
+    nomeFim: string,
+  ): string {
+    const inicio = ocorrencias.find(
+      (o) => o.ocorrencia?.nome_ocorrencia === nomeInicio,
+    )
+
+    const fim = ocorrencias.find(
+      (o) => o.ocorrencia?.nome_ocorrencia === nomeFim,
+    )
+
+    if (!inicio?.created_at || !fim?.created_at) return '00:00:00'
+
+    const dataInicio = new Date(inicio.created_at).getTime()
+    const dataFim = new Date(fim.created_at).getTime()
+
+    const diffMs = dataFim - dataInicio
+
+    if (diffMs <= 0) return '00:00:00'
+
+    const totalSegundos = Math.floor(diffMs / 1000)
+
+    const horas = Math.floor(totalSegundos / 3600)
+    const minutos = Math.floor((totalSegundos % 3600) / 60)
+    const segundos = totalSegundos % 60
+
+    return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(
+      2,
+      '0',
+    )}:${String(segundos).padStart(2, '0')}`
+  }
+
+  const tempoPausado = calcularTempoPausado(ocorrencias, 'Pausado', 'Retomado')
+
+  function calcularTempoPausado(
+    ocorrencias: IOcorrenciasEntrega[],
+    nomePausa: string,
+    nomeRetomada: string,
+  ): string {
+    if (!ocorrencias.length) return '00:00:00'
+
+    // Ordena por data crescente
+    const ordenadas = [...ocorrencias].sort((a, b) => {
+      const dataA = a.created_at ? new Date(a.created_at).getTime() : 0
+      const dataB = b.created_at ? new Date(b.created_at).getTime() : 0
+      return dataA - dataB
+    })
+
+    let totalMs = 0
+    let inicioPausa: number | null = null
+
+    for (const oc of ordenadas) {
+      const nome = oc.ocorrencia?.nome_ocorrencia
+      const data = oc.created_at ? new Date(oc.created_at).getTime() : null
+
+      if (!data) continue
+
+      if (nome === nomePausa) {
+        inicioPausa = data
+      }
+
+      if (nome === nomeRetomada && inicioPausa) {
+        totalMs += data - inicioPausa
+        inicioPausa = null
+      }
+    }
+
+    if (totalMs <= 0) return '00:00:00'
+
+    const totalSegundos = Math.floor(totalMs / 1000)
+
+    const horas = Math.floor(totalSegundos / 3600)
+    const minutos = Math.floor((totalSegundos % 3600) / 60)
+    const segundos = totalSegundos % 60
+
+    return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(
+      2,
+      '0',
+    )}:${String(segundos).padStart(2, '0')}`
+  }
+
   return (
     <>
       <MaxCard.Container>
@@ -145,23 +299,16 @@ export function CardCodFinal() {
                     <b>Não entregue</b>
                   </span>
                 )}
-                <span
-                  style={{
-                    fontSize: 13,
-                    display: 'flex',
-                    margin: 5,
-                  }}
-                >
-                  Tempo total = <b> 1h26min:67</b>
+
+                <span>
+                  Tempo total = <b>{tempoTotal}</b>
                 </span>
                 <span
                   style={{
-                    fontSize: 13,
                     display: 'flex',
-                    margin: 5,
                   }}
                 >
-                  Tempo pausado = <b> 3h26min:67</b>
+                  Tempo pausado = <b>{tempoPausado}</b>
                 </span>
               </div>
             </div>
@@ -249,7 +396,7 @@ export function CardCodFinal() {
                 </div>
               ))
             ) : (
-              <p>Nenhuma ocorrência registrada.</p>
+              <p style={{ color: 'gray' }}>Nenhuma ocorrência registrada.</p>
             )}
           </MaxCard.Body>
         </div>
@@ -265,29 +412,7 @@ export function CardCodFinal() {
         >
           <MaxCard.Body>
             <h3 style={{ margin: 20 }}>Observações:</h3>
-            {entrega.observacao && entrega.observacao.length > 0 ? (
-              <span
-                style={{
-                  fontSize: 13,
-                  display: 'flex',
-                  margin: 20,
-                  color: 'gray',
-                }}
-              >
-                {entrega.observacao}
-              </span>
-            ) : (
-              <span
-                style={{
-                  fontSize: 13,
-                  display: 'flex',
-                  margin: 20,
-                  color: 'gray',
-                }}
-              >
-                Nenhuma observação escrita.
-              </span>
-            )}
+            {conteudoObservacao}
           </MaxCard.Body>
         </div>
       </MaxCard.Container>
@@ -315,7 +440,7 @@ export function CardCodFinal() {
                 {entrega.imagem.map((img, index) => (
                   <img
                     key={index}
-                    src={`${window.location.protocol}//${window.location.hostname}:3333/uploads/${img}`}
+                    src={`http://192.168.1.62:3333/uploads/${img}`}
                     alt={`imagem-${index}`}
                     style={{
                       width: 150,
@@ -328,7 +453,9 @@ export function CardCodFinal() {
                 ))}
               </div>
             ) : (
-              <p style={{ margin: 20 }}>Nenhuma imagem cadastrada.</p>
+              <p style={{ margin: 20, color: 'gray' }}>
+                Nenhuma imagem cadastrada.
+              </p>
             )}
           </MaxCard.Body>
         </div>

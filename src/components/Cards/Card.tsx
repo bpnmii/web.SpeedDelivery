@@ -11,14 +11,17 @@ interface CardProps {
 
 export function Card({ filterValue }: CardProps) {
   const navigate = useNavigate()
-  const [entregas, setEntregas] = useState<IEntregas[]>([])
-  const [loading, setLoading] = useState(true)
   const { usuario } = useAuth()
+
+  const [entregas, setEntregas] = useState<IEntregas[]>([])
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   async function Iniciar(codigo_operacao: number | any) {
     try {
       const codigo = Number(codigo_operacao)
-
       const data = { status_entrega: StatusEntregaEnum.INICIADO }
 
       await api.entregas.atualizarEntregas(codigo, data)
@@ -36,47 +39,73 @@ export function Card({ filterValue }: CardProps) {
   async function Retomar(codigo_operacao: number | any) {
     try {
       const codigo = Number(codigo_operacao)
-
       const data = { status_entrega: StatusEntregaEnum.INICIADO }
 
       await api.entregas.atualizarEntregas(codigo, data)
-
       window.location.reload()
     } catch (err: any) {
       console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
     }
   }
 
+  async function carregarEntregas(pagina = 1) {
+    if (!usuario?.codigo_entregador || !hasMore) return
+
+    try {
+      if (pagina === 1) setLoading(true)
+      else setLoadingMore(true)
+
+      const response = await api.entregas.mostrarEntregasEntregador(
+        Number(usuario.codigo_entregador),
+        pagina,
+      )
+
+      const novasEntregas = response.data || []
+
+      if (novasEntregas.length < 10) {
+        setHasMore(false)
+      }
+
+      if (pagina === 1) {
+        setEntregas(novasEntregas)
+      } else {
+        setEntregas((prev) => [...prev, ...novasEntregas])
+      }
+    } catch (err) {
+      console.error('Erro ao carregar entregas:', err)
+    } finally {
+      setLoading(false)
+      setLoadingMore(false)
+    }
+  }
+
+  // Carregamento inicial
   useEffect(() => {
-    async function carregarEntregas() {
-      try {
-        const codigo = usuario?.codigo_entregador
+    setPage(1)
+    setHasMore(true)
+    carregarEntregas(1)
+  }, [usuario])
 
-        console.log('CODIGO ENTREGADOR:', usuario?.codigo_entregador)
-
-        if (!codigo) {
-          setEntregas([])
-          setLoading(false)
-          return
-        }
-
-        const response = await api.entregas.mostrarEntregasEntregador(
-          Number(codigo),
-        )
-
-        setEntregas(response.data || [])
-      } catch (err) {
-        console.error('Erro ao carregar entregas:', err)
-        setEntregas([])
-      } finally {
-        setLoading(false)
+  // Infinite scroll
+  useEffect(() => {
+    function handleScroll() {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 100 >=
+          document.documentElement.scrollHeight &&
+        hasMore &&
+        !loadingMore
+      ) {
+        const nextPage = page + 1
+        setPage(nextPage)
+        carregarEntregas(nextPage)
       }
     }
 
-    carregarEntregas()
-  }, [usuario])
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [page, hasMore, loadingMore])
 
-  // Função de filtragem por texto em múltiplos campos
+  // Filtro
   const filterEntregas = (data: IEntregas[]) => {
     if (!filterValue || filterValue.trim() === '') {
       return data
@@ -99,12 +128,10 @@ export function Card({ filterValue }: CardProps) {
     })
   }
 
-  // Filtra as entregas que NÃO estão concluídas
   const entregasAtivas = entregas.filter(
     (entrega) => entrega.status_entrega !== StatusEntregaEnum.CONCLUIDO,
   )
 
-  // Aplica o filtro de busca
   const entregasFiltradas = filterEntregas(entregasAtivas)
 
   if (loading) return <p>Carregando entregas...</p>
@@ -181,6 +208,7 @@ export function Card({ filterValue }: CardProps) {
                   </div>
                 </div>
               </MaxCard.Body>
+
               <MaxCard.Footer style={{ padding: 8 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   {entrega.status_entrega === StatusEntregaEnum.NAO_INICIADO ? (
@@ -223,6 +251,8 @@ export function Card({ filterValue }: CardProps) {
             : 'Nenhuma entrega corresponde ao filtro aplicado.'}
         </p>
       )}
+
+      {loadingMore && <p style={{ textAlign: 'center' }}>Carregando mais...</p>}
     </>
   )
 }

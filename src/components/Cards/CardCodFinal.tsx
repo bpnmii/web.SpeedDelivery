@@ -71,7 +71,17 @@ export function CardCodFinal() {
               </div>
             </div>
           </MaxCard.Header>
+        </div>
+      </MaxCard.Container>
 
+      <MaxCard.Container>
+        <div
+          style={{
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
+            borderRadius: 10,
+            marginBottom: 5,
+          }}
+        >
           <MaxCard.Body>
             <div
               style={{
@@ -92,9 +102,10 @@ export function CardCodFinal() {
                     margin: 5,
                   }}
                 >
-                  {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                  {entrega.estado}
+                  {entrega.endereco} - {entrega.bairro} - {entrega.cidade}/
+                  {entrega.estado} - {entrega.CEP}
                 </span>
+
                 {entrega.status_resultado ===
                   StatusResultadoEnum.ENTREGA_PARCIAL && (
                   <span
@@ -105,7 +116,7 @@ export function CardCodFinal() {
                       color: 'orange',
                     }}
                   >
-                    Entregue parcialmente concluída
+                    <b>Entregue parcialmente concluída</b>
                   </span>
                 )}
                 {entrega.status_resultado ===
@@ -118,7 +129,7 @@ export function CardCodFinal() {
                       color: 'green',
                     }}
                   >
-                    Entrega concluída
+                    <b>Entrega concluída</b>
                   </span>
                 )}
                 {entrega.status_resultado ===
@@ -131,9 +142,27 @@ export function CardCodFinal() {
                       color: 'red',
                     }}
                   >
-                    Não entregue
+                    <b>Não entregue</b>
                   </span>
                 )}
+                <span
+                  style={{
+                    fontSize: 13,
+                    display: 'flex',
+                    margin: 5,
+                  }}
+                >
+                  Tempo total = <b> 1h26min:67</b>
+                </span>
+                <span
+                  style={{
+                    fontSize: 13,
+                    display: 'flex',
+                    margin: 5,
+                  }}
+                >
+                  Tempo pausado = <b> 3h26min:67</b>
+                </span>
               </div>
             </div>
           </MaxCard.Body>
@@ -149,7 +178,7 @@ export function CardCodFinal() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{ margin: 20 }}>Itens do pedido de entrega:</h3>
+            <h3 style={{ margin: 10 }}>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
@@ -162,7 +191,7 @@ export function CardCodFinal() {
                     style={{
                       fontSize: 13,
                       display: 'flex',
-                      margin: 20,
+                      margin: 10,
                       color: 'gray',
                     }}
                   >
@@ -189,7 +218,7 @@ export function CardCodFinal() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{ margin: 20 }}>Ocorrências:</h3>
+            <h3 style={{ margin: 10 }}>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
                 <div
@@ -202,9 +231,11 @@ export function CardCodFinal() {
                     style={{
                       fontSize: 13,
                       display: 'flex',
-                      margin: 20,
+                      margin: 10,
                       color: 'gray',
-                      gap: 73,
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      alignItems: 'center',
                     }}
                   >
                     <span>{oc.ocorrencia?.nome_ocorrencia}</span>

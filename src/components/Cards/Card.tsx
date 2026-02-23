@@ -157,8 +157,8 @@ export function Card({ filterValue }: CardProps) {
                         margin: 5,
                       }}
                     >
-                      {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                      {entrega.estado}
+                      {entrega.endereco} - {entrega.bairro} - {entrega.cidade}/
+                      {entrega.estado} - {entrega.CEP}
                     </span>
                   </div>
 

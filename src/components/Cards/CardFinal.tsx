@@ -1,4 +1,4 @@
-import { IEntregas, StatusEntregaEnum } from '@/@types'
+import { IEntregas, StatusEntregaEnum, StatusResultadoEnum } from '@/@types'
 import api from '@/api/api'
 import { Button, MaxCard } from 'maxscalla-lib'
 import { useEffect, useState } from 'react'
@@ -39,7 +39,10 @@ export function CardFinal({ filterValue }: CardFinalProps) {
 
     return data.filter((entrega) => {
       return (
-        entrega.codigo_operacao?.toString().toLowerCase().includes(searchValue) ||
+        entrega.codigo_operacao
+          ?.toString()
+          .toLowerCase()
+          .includes(searchValue) ||
         entrega.nome_cliente?.toLowerCase().includes(searchValue) ||
         entrega.endereco?.toLowerCase().includes(searchValue) ||
         entrega.bairro?.toLowerCase().includes(searchValue) ||
@@ -51,7 +54,7 @@ export function CardFinal({ filterValue }: CardFinalProps) {
 
   // Filtra as entregas concluídas
   const entregasConcluidas = entregas.filter(
-    (entrega) => entrega.status_entrega === StatusEntregaEnum.CONCLUIDO
+    (entrega) => entrega.status_entrega === StatusEntregaEnum.CONCLUIDO,
   )
 
   // Aplica o filtro de busca
@@ -79,25 +82,25 @@ export function CardFinal({ filterValue }: CardFinalProps) {
                   style={{
                     alignItems: 'center',
                     display: 'flex',
-                    gap:5
+                    gap: 5,
                   }}
                 >
                   <i className="fa-solid fa-user"></i>
-                  
-                  <div >
-                    <h3
-                      style={{ display: 'flex', margin:5 }}>
-                        Entrega N° {entrega.codigo_operacao} 
+
+                  <div>
+                    <h3 style={{ display: 'flex', margin: 5 }}>
+                      Entrega N° {entrega.codigo_operacao}
                     </h3>
 
-                    <span   
+                    <span
                       style={{
                         fontSize: 13,
                         display: 'flex',
                         margin: 5,
-                        marginTop:8
-                      }}>
-                        {entrega.nome_cliente}
+                        marginTop: 8,
+                      }}
+                    >
+                      {entrega.nome_cliente}
                     </span>
 
                     <span
@@ -105,11 +108,50 @@ export function CardFinal({ filterValue }: CardFinalProps) {
                         fontSize: 13,
                         display: 'flex',
                         margin: 5,
-                      }}>
-                        {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                        {entrega.estado}
+                      }}
+                    >
+                      {entrega.endereco} - {entrega.bairro} - {entrega.cidade}/
+                      {entrega.estado} - {entrega.CEP}
                     </span>
-                    
+                    {entrega.status_resultado ===
+                      StatusResultadoEnum.ENTREGA_PARCIAL && (
+                      <span
+                        style={{
+                          fontSize: 13,
+                          display: 'flex',
+                          margin: 5,
+                          color: 'orange',
+                        }}
+                      >
+                        Entregue parcialmente concluída
+                      </span>
+                    )}
+                    {entrega.status_resultado ===
+                      StatusResultadoEnum.ENTREGA_TOTAL && (
+                      <span
+                        style={{
+                          fontSize: 13,
+                          display: 'flex',
+                          margin: 5,
+                          color: 'green',
+                        }}
+                      >
+                        Entrega concluída
+                      </span>
+                    )}
+                    {entrega.status_resultado ===
+                      StatusResultadoEnum.NAO_ENTREGUE && (
+                      <span
+                        style={{
+                          fontSize: 13,
+                          display: 'flex',
+                          margin: 5,
+                          color: 'red',
+                        }}
+                      >
+                        Não entregue
+                      </span>
+                    )}
                   </div>
                 </div>
               </MaxCard.Body>

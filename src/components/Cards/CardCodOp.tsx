@@ -138,19 +138,35 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Header>
-            <div style={{ display: 'flex' }} className="d-flex gap-20">
-              <div style={{ display: 'flex', gap: 20 }} className="initial">
-                <Button onClick={() => navigate('/home')}>
-                  <i className="fa-solid fa-arrow-left-long"></i>
-                </Button>
-                <Button onClick={tratarAbrirRota} style={{ marginLeft: 170 }}>
-                  <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>{' '}
-                  <span style={{ fontSize: 15 }}>Localizar</span>
-                </Button>
-              </div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'center',
+              }}
+            >
+              <Button onClick={() => navigate('/home')}>
+                <i className="fa-solid fa-arrow-left-long"></i>
+              </Button>
+
+              <Button onClick={tratarAbrirRota}>
+                <i className="fa-sharp-duotone fa-light fa-circle-location-arrow"></i>
+                <span style={{ fontSize: 15 }}>Localizar</span>
+              </Button>
             </div>
           </MaxCard.Header>
+        </div>
+      </MaxCard.Container>
 
+      <MaxCard.Container>
+        <div
+          style={{
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
+            borderRadius: 10,
+            marginBottom: 5,
+          }}
+        >
           <MaxCard.Body>
             <div
               style={{
@@ -171,8 +187,8 @@ export function CardCodOp() {
                     margin: 5,
                   }}
                 >
-                  {entrega.endereco}, {entrega.bairro} - {entrega.cidade}/
-                  {entrega.estado}
+                  {entrega.endereco} - {entrega.bairro} - {entrega.cidade}/
+                  {entrega.estado} - {entrega.CEP}
                 </span>
               </div>
             </div>
@@ -189,7 +205,7 @@ export function CardCodOp() {
           }}
         >
           <MaxCard.Body>
-            <h3 style={{ margin: 20 }}>Itens do pedido de entrega:</h3>
+            <h3 style={{ margin: 10 }}>Itens do pedido de entrega:</h3>
             {itensPedido && itensPedido.length > 0 ? (
               itensPedido.map((item) => (
                 <div
@@ -202,7 +218,7 @@ export function CardCodOp() {
                     style={{
                       fontSize: 13,
                       display: 'flex',
-                      margin: 20,
+                      margin: 10,
                       color: 'gray',
                     }}
                   >
@@ -225,11 +241,11 @@ export function CardCodOp() {
           style={{
             boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
             borderRadius: 10,
-            marginBottom: 10,
+            marginBottom: 5,
           }}
         >
           <MaxCard.Body>
-            <h3 style={{ margin: 20 }}>Ocorrências:</h3>
+            <h3 style={{ margin: 10 }}>Ocorrências:</h3>
             {ocorrencias && ocorrencias.length > 0 ? (
               ocorrencias.map((oc, index) => (
                 <div
@@ -242,9 +258,11 @@ export function CardCodOp() {
                     style={{
                       fontSize: 13,
                       display: 'flex',
-                      margin: 20,
+                      margin: 10,
                       color: 'gray',
-                      gap: 165,
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      alignItems: 'center',
                     }}
                   >
                     <span>{oc.ocorrencia?.nome_ocorrencia}</span>
@@ -261,6 +279,7 @@ export function CardCodOp() {
               <p>Nenhuma ocorrência registrada.</p>
             )}
           </MaxCard.Body>
+
           <MaxCard.Footer>
             <div
               style={{
@@ -277,8 +296,10 @@ export function CardCodOp() {
             </div>
           </MaxCard.Footer>
         </div>
+      </MaxCard.Container>
 
-        <div
+      <MaxCard.Container>
+        <MaxCard.Body
           style={{
             display: 'flex',
             gap: 20,
@@ -304,7 +325,7 @@ export function CardCodOp() {
               <i className="fa-solid fa-angles-right"></i> Concluir
             </Button>
           ) : null}
-        </div>
+        </MaxCard.Body>
 
         <Modal
           isOpen={IsOpen}

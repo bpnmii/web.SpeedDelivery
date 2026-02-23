@@ -18,20 +18,20 @@ export const Router = () => {
         <Route element={<PrivateRoute />}>
           <Route element={<ContainerRoot />}>
             <Route path="/home" element={<Home />} />
-            <Route
-              path="/DetalheEntrega/:codigo_operacao"
-              element={<DetalheEntrega />}
-            />
-            <Route
-              path="/ResultadoEntrega/:codigo_operacao"
-              element={<ResultadoEntrega />}
-            />
             <Route path="/Finalizadas" element={<Finalizadas />} />
-            <Route
-              path="/DetalheEntregaFinal/:codigo_operacao"
-              element={<DetalheEntregaFinal />}
-            />
           </Route>
+          <Route
+            path="/DetalheEntrega/:codigo_operacao"
+            element={<DetalheEntrega />}
+          />
+          <Route
+            path="/ResultadoEntrega/:codigo_operacao"
+            element={<ResultadoEntrega />}
+          />
+          <Route
+            path="/DetalheEntregaFinal/:codigo_operacao"
+            element={<DetalheEntregaFinal />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

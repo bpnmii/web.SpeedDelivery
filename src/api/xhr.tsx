@@ -6,13 +6,12 @@ const url = 'http://192.168.1.62:3333'
 
 const headers = (tokenAuth: string): AxiosRequestHeaders => ({
   Accept: 'application/json',
-  'Content-Type': 'application/json',
   'X-Requested-With': 'XMLHttpRequest',
   Authorization: `Bearer ${tokenAuth}`,
 })
 
 const getHeaders = (): AxiosRequestHeaders => {
-  const tokenAuth = localStorage.getItem('@CSGestor:token')
+  const tokenAuth = localStorage.getItem('@SpeedDelivery:token')
 
   return headers(tokenAuth!)
 }

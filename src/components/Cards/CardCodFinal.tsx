@@ -440,7 +440,7 @@ export function CardCodFinal() {
                 {entrega.imagem.map((img, index) => (
                   <img
                     key={index}
-                    src={`http://192.168.1.62:3333/uploads/${img}`}
+                    src={`https://drive.google.com/uc?export=view&id=${img}`}
                     alt={`imagem-${index}`}
                     style={{
                       width: 150,

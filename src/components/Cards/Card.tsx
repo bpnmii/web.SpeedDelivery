@@ -36,18 +36,6 @@ export function Card({ filterValue }: CardProps) {
     }
   }
 
-  async function Retomar(codigo_operacao: number | any) {
-    try {
-      const codigo = Number(codigo_operacao)
-      const data = { status_entrega: StatusEntregaEnum.INICIADO }
-
-      await api.entregas.atualizarEntregas(codigo, data)
-      window.location.reload()
-    } catch (err: any) {
-      console.error('ERRO DO SERVIDOR:', err.response?.data || err.message)
-    }
-  }
-
   async function carregarEntregas(pagina = 1) {
     if (!usuario?.codigo_entregador || !hasMore) return
 
@@ -223,16 +211,15 @@ export function Card({ filterValue }: CardProps) {
                   ) : entrega.status_entrega === StatusEntregaEnum.PAUSADO ? (
                     <Button
                       onClick={() => {
-                        Retomar(entrega.codigo_operacao)
                         navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)
                       }}
                     >
-                      <i className="fa-solid fa-play"></i> <span>Retomar</span>
+                      <i className="fa-solid fa-pause"></i>{' '}
+                      <span>Continuar</span>
                     </Button>
                   ) : entrega.status_entrega === StatusEntregaEnum.INICIADO ? (
                     <Button
                       onClick={() => {
-                        Retomar(entrega.codigo_operacao)
                         navigate(`/DetalheEntrega/${entrega.codigo_operacao}`)
                       }}
                     >
